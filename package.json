@@ -1,0 +1,21 @@
+{
+  "name": "africlick",
+  "version": "1.0.0",
+  "description": "Plateforme de micro-gains réels",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.4",
+    "body-parser": "^1.20.2",
+    "axios": "^1.4.0",
+    "nodemailer": "^6.9.5",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
