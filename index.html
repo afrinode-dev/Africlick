@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Africlick - Gagnez de l'argent réel</title>
+    <title>Africlick - Jeux & Gains Réels</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         :root {
             --primary: #FF7F00;
@@ -15,6 +16,10 @@
             --danger: #F44336;
             --success: #4CAF50;
             --warning: #FFC107;
+            --moov: #FF6B00;
+            --airtel: #FF0000;
+            --jet: #3F51B5;
+            --diamond: #00BCD4;
         }
         
         * {
@@ -25,9 +30,10 @@
         }
         
         body {
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--dark);
+            color: var(--light);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -68,6 +74,7 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         header p {
@@ -84,7 +91,8 @@
         }
         
         .form-container {
-            background: white;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -93,15 +101,17 @@
             transition: transform 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .form-container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         
         .form-container h2 {
             margin-bottom: 20px;
-            color: var(--dark);
+            color: white;
             text-align: center;
         }
         
@@ -113,21 +123,25 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
+            color: white;
         }
         
         .form-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 5px;
             font-size: 1rem;
-            transition: border 0.3s;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.2);
+            color: white;
         }
         
         .form-group input:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
+            background: rgba(0,0,0,0.3);
         }
         
         button {
@@ -145,12 +159,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         button:hover {
             background-color: #E67100;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
         button:disabled {
@@ -158,15 +173,18 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+            opacity: 0.7;
         }
         
         .dashboard {
             display: none;
-            background: white;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .user-info {
@@ -187,6 +205,7 @@
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         
         .points-display::after {
@@ -212,6 +231,7 @@
             font-weight: bold;
             position: relative;
             z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .actions {
@@ -226,6 +246,14 @@
             min-width: 200px;
         }
         
+        .deposit-btn {
+            background-color: var(--success);
+        }
+        
+        .deposit-btn:hover {
+            background-color: #3d8b40;
+        }
+        
         .withdraw-btn {
             background-color: var(--accent);
         }
@@ -234,15 +262,23 @@
             background-color: #C2185B;
         }
         
-        .tasks-container {
+        .referral-btn {
+            background-color: var(--moov);
+        }
+        
+        .referral-btn:hover {
+            background-color: #d45a00;
+        }
+        
+        .games-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
         
-        .task-card {
-            background: white;
+        .game-card {
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -250,15 +286,18 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .task-card:hover {
+        .game-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border-color: var(--primary);
+            background: rgba(255,255,255,0.1);
         }
         
-        .task-card.highlight {
+        .game-card.highlight {
             animation: highlight 1.5s infinite;
         }
         
@@ -267,20 +306,20 @@
             50% { border-color: var(--warning); box-shadow: 0 0 15px var(--warning); }
         }
         
-        .task-card h3 {
+        .game-card h3 {
             margin-bottom: 10px;
-            color: var(--dark);
+            color: white;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .task-card p {
+        .game-card p {
             margin-bottom: 15px;
-            color: #666;
+            color: rgba(255,255,255,0.8);
         }
         
-        .task-card .reward {
+        .game-card .reward {
             font-weight: bold;
             color: var(--primary);
             display: flex;
@@ -288,15 +327,15 @@
             gap: 5px;
         }
         
-        .task-card button {
+        .game-card button {
             background-color: var(--secondary);
         }
         
-        .task-card button:hover {
+        .game-card button:hover {
             background-color: #00796B;
         }
         
-        .task-card .task-badge {
+        .game-card .game-badge {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -309,10 +348,12 @@
         }
         
         .history {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 25px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .history h2 {
@@ -320,6 +361,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: white;
         }
         
         table {
@@ -330,16 +372,17 @@
         th, td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white;
         }
         
         th {
-            background-color: var(--light);
+            background-color: rgba(0,0,0,0.2);
             font-weight: 600;
         }
         
         tr:hover {
-            background-color: #f9f9f9;
+            background-color: rgba(255,255,255,0.05);
         }
         
         .status-pending {
@@ -361,10 +404,12 @@
             display: none;
             text-align: center;
             margin-bottom: 30px;
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 25px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .wheel {
@@ -375,8 +420,8 @@
             border-radius: 50%;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            border: 8px solid #fff;
-            background: #f5f5f5;
+            border: 8px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
         }
         
         .wheel-btn {
@@ -397,27 +442,546 @@
             z-index: 10;
         }
         
-        .withdraw-modal {
+        /* Game Modal Styles */
+        .game-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
             justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .game-modal-content {
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            background: rgba(44, 62, 80, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .game-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .game-controls input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+            color: white;
+        }
+        
+        .game-controls button {
+            width: auto;
+            padding: 10px 15px;
+        }
+        
+        /* Game Canvas Styles */
+        .game-canvas {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Aviator Game */
+        #aviatorCanvas {
+            background: linear-gradient(to bottom, #1A237E, #283593);
+        }
+        
+        .airplane {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            color: white;
+            z-index: 10;
+        }
+        
+        .multiplier-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 5;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        
+        /* Plinko Game */
+        #plinkoCanvas {
+            background: linear-gradient(to bottom, #004D40, #00796B);
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
         
-        .withdraw-content {
+        .peg {
+            position: absolute;
+            width: 12px;
+            height: 12px;
             background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255,255,255,0.7);
+        }
+        
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .plinko-bucket {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            height: 60px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        /* JetX Game */
+        #jetxCanvas {
+            background: linear-gradient(to bottom, #0D47A1, #1565C0);
+        }
+        
+        .jet {
+            position: absolute;
+            font-size: 3rem;
+            color: white;
+            z-index: 10;
+        }
+        
+        .obstacle {
+            position: absolute;
+            background: var(--danger);
+            border-radius: 5px;
+        }
+        
+        /* Mines Game */
+        #minesCanvas {
+            background: linear-gradient(to bottom, #311B92, #4527A0);
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .mine-cell {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mine-cell:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .mine-cell.revealed {
+            background: var(--danger);
+            transform: scale(0.95);
+        }
+        
+        .mine-cell.diamond {
+            background: var(--diamond);
+            transform: scale(0.95);
+        }
+        
+        .mine-cell i {
+            font-size: 1.5rem;
+        }
+        
+        /* Dice Game */
+        #diceCanvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dice {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .dice-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Limbo Game */
+        #limboCanvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .limbo-bar {
+            width: 80%;
+            height: 10px;
+            background: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .limbo-ball {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Crazy Time Game */
+        #crazyTimeCanvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .crazy-wheel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0% 20%,
+                var(--secondary) 20% 40%,
+                var(--accent) 40% 60%,
+                var(--success) 60% 80%,
+                var(--warning) 80% 100%
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .crazy-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--danger);
+        }
+        
+        /* Sweet Bonanza Game */
+        #sweetBonanzaCanvas {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .bonanza-cell {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bonanza-cell:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Book of Ra Game */
+        #bookOfRaCanvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slot-machine {
+            width: 100%;
+            height: 150px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .slot-reel {
+            width: 80px;
+            height: 120px;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slot-symbol {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+        
+        /* Roulette Live Game */
+        #rouletteCanvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .roulette-wheel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #000 0deg 5deg, 
+                #C00 5deg 15deg,
+                #000 15deg 25deg,
+                #C00 25deg 35deg,
+                #000 35deg 45deg,
+                #C00 45deg 55deg,
+                #000 55deg 65deg,
+                #C00 65deg 75deg,
+                #000 75deg 85deg,
+                #C00 85deg 95deg,
+                #000 95deg 105deg,
+                #C00 105deg 115deg,
+                #000 115deg 125deg,
+                #C00 125deg 135deg,
+                #000 135deg 145deg,
+                #C00 145deg 155deg,
+                #000 155deg 165deg,
+                #C00 165deg 175deg,
+                #000 175deg 185deg,
+                #C00 185deg 195deg,
+                #000 195deg 205deg,
+                #C00 205deg 215deg,
+                #000 215deg 225deg,
+                #C00 225deg 235deg,
+                #000 235deg 245deg,
+                #C00 245deg 255deg,
+                #000 255deg 265deg,
+                #C00 265deg 275deg,
+                #000 275deg 285deg,
+                #C00 285deg 295deg,
+                #000 295deg 305deg,
+                #C00 305deg 315deg,
+                #000 315deg 325deg,
+                #C00 325deg 335deg,
+                #000 335deg 345deg,
+                #C00 345deg 355deg,
+                #000 355deg 360deg
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .roulette-ball {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Game Stats */
+        .game-stats {
+            display: flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .game-stats div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .game-stats span {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* Quick Bet Buttons */
+        .quick-bet-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .quick-bet-buttons button {
+            padding: 8px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-bet-buttons button:hover {
+            background: var(--primary);
+        }
+        
+        /* Game Notification */
+        .game-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .game-notification.success {
+            border-left-color: var(--success);
+        }
+        
+        .game-notification.error {
+            border-left-color: var(--danger);
+        }
+        
+        /* Sound Toggle */
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        
+        .sound-toggle:hover {
+            transform: scale(1.1);
+            background: var(--primary);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: rgba(44, 62, 80, 0.95);
             padding: 30px;
             border-radius: 10px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
             position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
         }
         
         .close-modal {
@@ -426,32 +990,44 @@
             right: 15px;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #666;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.3s;
         }
         
         .close-modal:hover {
             color: var(--danger);
+            transform: rotate(90deg);
         }
         
-        .withdraw-form .form-group {
+        .modal-form .form-group {
             margin-bottom: 20px;
         }
         
-        .withdraw-form label {
+        .modal-form label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
         }
         
-        .withdraw-form input, .withdraw-form select {
+        .modal-form input, .modal-form select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 5px;
             font-size: 1rem;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            transition: all 0.3s;
         }
         
-        .withdraw-form button {
+        .modal-form input:focus, .modal-form select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
+            background: rgba(0,0,0,0.4);
+        }
+        
+        .modal-form button {
             margin-top: 20px;
         }
         
@@ -461,7 +1037,7 @@
         
         .tabs {
             display: flex;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 20px;
         }
         
@@ -470,12 +1046,17 @@
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
+            color: rgba(255,255,255,0.7);
         }
         
         .tab.active {
             border-bottom-color: var(--primary);
             color: var(--primary);
             font-weight: bold;
+        }
+        
+        .tab:hover:not(.active) {
+            color: white;
         }
         
         .tab-content {
@@ -486,12 +1067,13 @@
             display: block;
         }
         
-        .offer-iframe {
+        .game-iframe {
             width: 100%;
             height: 500px;
             border: none;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(0,0,0,0.3);
         }
         
         .loading {
@@ -516,13 +1098,16 @@
             color: white;
             padding: 15px 20px;
             border-radius: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transform: translateX(200%);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
             z-index: 1000;
             display: flex;
             align-items: center;
             gap: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 350px;
         }
         
         .notification.show {
@@ -535,42 +1120,97 @@
         
         .notification.warning {
             background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .notification.info {
+            background: var(--secondary);
         }
         
         footer {
             text-align: center;
             padding: 20px;
-            color: #666;
+            color: rgba(255,255,255,0.6);
             font-size: 0.9rem;
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        @media (max-width: 768px) {
-            .auth-forms {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-            
-            .tasks-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .wheel {
-                width: 250px;
-                height: 250px;
-            }
-            
-            .tab {
-                padding: 8px 12px;
-                font-size: 0.9rem;
-            }
+        .referral-code {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .referral-code:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .referral-code span {
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+        
+        .copy-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .deposit-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .method-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .method-btn.active {
+            border-color: var(--primary);
+            background: rgba(255,127,0,0.1);
+            box-shadow: 0 0 10px rgba(255,127,0,0.2);
+        }
+        
+        .method-btn i {
+            font-size: 1.5rem;
+        }
+        
+        .moov-btn {
+            color: var(--moov);
+        }
+        
+        .airtel-btn {
+            color: var(--airtel);
         }
         
         /* Animation classes */
@@ -602,53 +1242,85 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-
-        /* Verification form styles */
-        .verification-container {
-            display: none;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 30px;
-            transition: transform 0.3s ease;
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            opacity: 0;
+            z-index: 999;
+            animation: confetti 3s ease-in-out forwards;
         }
-
-        .verification-container h2 {
-            margin-bottom: 20px;
+        
+        @keyframes confetti {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .coin-animation {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-color: gold;
+            border-radius: 50%;
+            z-index: 999;
+            animation: coin 1s ease-in-out forwards;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
             color: var(--dark);
-            text-align: center;
         }
-
-        .verification-info {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
+        
+        @keyframes coin {
+            0% { transform: scale(0.5) translateY(0); opacity: 1; }
+            50% { transform: scale(1.2) translateY(-50px); opacity: 1; }
+            100% { transform: scale(0) translateY(-100px); opacity: 0; }
         }
-
-        .verification-info i {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .resend-code {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .resend-code a {
-            color: var(--primary);
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .resend-code a:hover {
-            text-decoration: underline;
+        
+        @media (max-width: 768px) {
+            .auth-forms {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .games-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .wheel {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px 15px;
+            }
+            
+            .game-modal-content {
+                width: 95%;
+                height: 85vh;
+                padding: 15px;
+            }
+            
+            .quick-bet-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -656,7 +1328,7 @@
     <header>
         <div class="container">
             <h1><i class="fas fa-coins"></i> Africlick</h1>
-            <p>Gagnez de l'argent réel en effectuant de simples tâches</p>
+            <p>Jouez et gagnez de l'argent réel avec nos mini-jeux passionnants</p>
         </div>
     </header>
     
@@ -689,36 +1361,16 @@
                         <input type="text" id="registerPhone" placeholder="Ex: 062178283" required>
                     </div>
                     <div class="form-group">
-                        <label for="registerEmail"><i class="fas fa-envelope"></i> Adresse e-mail</label>
-                        <input type="email" id="registerEmail" placeholder="votre@email.com" required>
-                    </div>
-                    <div class="form-group">
                         <label for="registerPassword"><i class="fas fa-lock"></i> Mot de passe</label>
                         <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="referralCode"><i class="fas fa-user-friends"></i> Code de parrainage (optionnel)</label>
+                        <input type="text" id="referralCode" placeholder="Code d'un ami">
                     </div>
                     <button type="submit"><i class="fas fa-user-plus"></i> S'inscrire</button>
                 </form>
             </div>
-        </div>
-
-        <!-- Verification form -->
-        <div class="verification-container" id="verificationContainer">
-            <h2><i class="fas fa-envelope"></i> Vérification du compte</h2>
-            <div class="verification-info">
-                <i class="fas fa-envelope-open-text"></i>
-                <p>Nous avons envoyé un code de vérification à <span id="userEmailDisplay"></span></p>
-                <p>Veuillez entrer le code reçu ci-dessous :</p>
-            </div>
-            <form id="verificationForm">
-                <div class="form-group">
-                    <label for="verificationCode"><i class="fas fa-key"></i> Code de vérification</label>
-                    <input type="text" id="verificationCode" placeholder="Entrez le code à 6 chiffres" required maxlength="6">
-                </div>
-                <button type="submit"><i class="fas fa-check-circle"></i> Vérifier mon compte</button>
-                <div class="resend-code">
-                    <p>Vous n'avez pas reçu de code ? <a id="resendCodeBtn">Renvoyer le code</a></p>
-                </div>
-            </form>
         </div>
         
         <div class="dashboard" id="dashboard">
@@ -730,12 +1382,14 @@
             <div class="points-display pulse">
                 <h2><i class="fas fa-coins"></i> Vos points</h2>
                 <p id="pointsDisplay">0</p>
-                <small>100 points = 1€</small>
+                <small>1000 FCFA déposés = 10 points | 1 point = 100 FCFA</small>
             </div>
             
             <div class="actions">
-                <button id="wheelBtn"><i class="fas fa-redo"></i> Tourner la roue de la chance</button>
-                <button class="withdraw-btn" id="withdrawBtn"><i class="fas fa-money-bill-wave"></i> Retirer de l'argent</button>
+                <button class="deposit-btn" id="depositBtn"><i class="fas fa-money-bill-wave"></i> Dépôt</button>
+                <button class="withdraw-btn" id="withdrawBtn"><i class="fas fa-wallet"></i> Retrait</button>
+                <button class="referral-btn" id="referralBtn"><i class="fas fa-user-friends"></i> Parrainage</button>
+                <button id="wheelBtn"><i class="fas fa-redo"></i> Roue de la chance</button>
             </div>
             
             <div class="wheel-container" id="wheelContainer">
@@ -745,83 +1399,178 @@
                     <!-- La roue sera générée en JS -->
                 </div>
                 <button class="wheel-btn" id="spinWheelBtn"><i class="fas fa-sync-alt"></i> Tourner la roue (<span id="wheelAttempts">1</span> essai/jour)</button>
+                <p id="wheelMultiplierInfo" style="margin-top: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                    Multiplicateur actuel: <span id="wheelMultiplier">1</span>x (augmente avec vos dépôts)
+                </p>
             </div>
             
             <div class="tab-container">
                 <div class="tabs">
-                    <div class="tab active" data-tab="tasks">Tâches disponibles</div>
-                    <div class="tab" data-tab="offers">Offres rémunérées</div>
-                    <div class="tab" data-tab="surveys">Sondages payants</div>
+                    <div class="tab active" data-tab="games">Jeux</div>
+                    <div class="tab" data-tab="history">Historique</div>
                 </div>
                 
-                <div class="tab-content active" id="tasksTab">
-                    <h2><i class="fas fa-tasks"></i> Tâches disponibles</h2>
-                    <div class="tasks-container" id="tasksContainer">
-                        <!-- Les tâches seront générées dynamiquement -->
+                <div class="tab-content active" id="gamesTab">
+                    <h2><i class="fas fa-gamepad"></i> Jeux disponibles</h2>
+                    <div class="games-container" id="gamesContainer">
+                        <!-- Les jeux seront générés dynamiquement -->
                     </div>
                 </div>
                 
-                <div class="tab-content" id="offersTab">
-                    <h2><i class="fas fa-ad"></i> Offres rémunérées</h2>
-                    <p>Complétez des offres et gagnez des points immédiatement!</p>
-                    <iframe class="offer-iframe" id="offerIframe" src="about:blank"></iframe>
+                <div class="tab-content" id="historyTab">
+                    <h2><i class="fas fa-history"></i> Historique des activités</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Activité</th>
+                                <th>Points</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable">
+                            <!-- L'historique sera généré dynamiquement -->
+                        </tbody>
+                    </table>
                 </div>
-                
-                <div class="tab-content" id="surveysTab">
-                    <h2><i class="fas fa-poll"></i> Sondages payants</h2>
-                    <p>Répondez à des sondages et gagnez des points!</p>
-                    <iframe class="offer-iframe" id="surveyIframe" src="about:blank"></iframe>
-                </div>
-            </div>
-            
-            <div class="history">
-                <h2><i class="fas fa-history"></i> Historique des activités</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Activité</th>
-                            <th>Points</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTable">
-                        <!-- L'historique sera généré dynamiquement -->
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
     
-    <div class="withdraw-modal" id="withdrawModal">
-        <div class="withdraw-content">
+    <!-- Modal de dépôt -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2><i class="fas fa-money-bill-wave"></i> Demande de retrait</h2>
-            <p>Minimum de retrait: 500 points (5€)</p>
+            <h2><i class="fas fa-money-bill-wave"></i> Effectuer un dépôt</h2>
+            <p>Minimum de dépôt: 1000 FCFA (10 points)</p>
             
-            <form class="withdraw-form" id="withdrawForm">
+            <div class="deposit-methods">
+                <div class="method-btn moov-btn" data-method="moov">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Moov Africa</span>
+                </div>
+                <div class="method-btn airtel-btn" data-method="airtel">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Airtel Money</span>
+                </div>
+            </div>
+            
+            <form class="modal-form" id="depositForm">
+                <input type="hidden" id="depositMethod" value="">
+                
                 <div class="form-group">
-                    <label for="withdrawAmount">Montant (en points)</label>
-                    <input type="number" id="withdrawAmount" min="500" required>
+                    <label for="depositAmount">Montant (en FCFA)</label>
+                    <input type="number" id="depositAmount" min="1000" step="500" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="withdrawMethod">Méthode de retrait</label>
-                    <select id="withdrawMethod" required>
-                        <option value="">Sélectionnez une méthode</option>
-                        <option value="airtel">Airtel Money</option>
-                        <option value="orange" disabled>Orange Money (bientôt disponible)</option>
-                        <option value="mtn" disabled>MTN Mobile Money (bientôt disponible)</option>
-                    </select>
+                    <label for="depositPhone">Numéro de téléphone</label>
+                    <input type="text" id="depositPhone" placeholder="Numéro lié à votre compte" required>
+                </div>
+                
+                <button type="submit" id="submitDeposit"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de retrait -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-wallet"></i> Demande de retrait</h2>
+            <p>Minimum de retrait: 10 points (1000 FCFA)</p>
+            
+            <div class="deposit-methods">
+                <div class="method-btn moov-btn" data-method="moov">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Moov Africa</span>
+                </div>
+                <div class="method-btn airtel-btn" data-method="airtel">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Airtel Money</span>
+                </div>
+            </div>
+            
+            <form class="modal-form" id="withdrawForm">
+                <input type="hidden" id="withdrawMethod" value="">
+                
+                <div class="form-group">
+                    <label for="withdrawAmount">Montant (en points)</label>
+                    <input type="number" id="withdrawAmount" min="10" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="withdrawPhone">Numéro de téléphone</label>
-                    <input type="text" id="withdrawPhone" placeholder="Numéro lié à votre compte Airtel Money" required>
+                    <input type="text" id="withdrawPhone" placeholder="Numéro lié à votre compte" required>
                 </div>
                 
                 <button type="submit" id="submitWithdraw"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
             </form>
+        </div>
+    </div>
+    
+    <!-- Modal de parrainage -->
+    <div class="modal" id="referralModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-user-friends"></i> Programme de parrainage</h2>
+            <p>Invitez vos amis et gagnez 20 points pour chaque ami qui s'inscrit et effectue un dépôt.</p>
+            
+            <div class="referral-code" id="referralCodeDisplay">
+                <span id="userReferralCode">Chargement...</span>
+                <button class="copy-btn" id="copyReferralBtn"><i class="fas fa-copy"></i> Copier</button>
+            </div>
+            
+            <h3 style="margin-top: 20px;"><i class="fas fa-trophy"></i> Vos filleuls</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody id="referralsTable">
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Modal de jeu -->
+    <div class="game-modal" id="gameModal">
+        <div class="game-modal-content">
+            <div class="game-header">
+                <h2 id="gameModalTitle">Jeu</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="game-body">
+                <div class="game-canvas" id="gameCanvas">
+                    Sélectionnez un jeu pour commencer
+                </div>
+                
+                <div class="quick-bet-buttons">
+                    <button onclick="setBetAmount(10)">10</button>
+                    <button onclick="setBetAmount(50)">50</button>
+                    <button onclick="setBetAmount(100)">100</button>
+                    <button onclick="setBetAmount(500)">500</button>
+                    <button onclick="setBetAmount(1000)">1000</button>
+                </div>
+                
+                <div class="game-controls">
+                    <input type="number" id="gameBetAmount" placeholder="Montant à miser" min="1">
+                    <button id="gameBetBtn"><i class="fas fa-coins"></i> Miser</button>
+                    <button id="gameCashoutBtn" style="display: none;"><i class="fas fa-money-bill-wave"></i> Récupérer</button>
+                </div>
+                
+                <div class="game-stats">
+                    <div>Solde: <span id="gameBalanceDisplay">0</span> points</div>
+                    <div>Dernier gain: <span id="gameLastWin">0</span> points</div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -830,116 +1579,206 @@
         <span id="notificationText">Notification message</span>
     </div>
     
+    <div class="game-notification" id="gameNotification"></div>
+    
+    <!-- Sound Toggle -->
+    <div class="sound-toggle" id="soundToggle">
+        <i class="fas fa-volume-up"></i>
+    </div>
+    
+    <!-- Audio Elements -->
+    <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+    <audio id="loseSound" src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-lose-2027.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
+    <audio id="explosionSound" src="https://assets.mixkit.co/sfx/preview/mixkit-explosion-impact-1684.mp3" preload="auto"></audio>
+    <audio id="coinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-coins-handling-1939.mp3" preload="auto"></audio>
+    
     <footer>
         <div class="container">
-            <p>Africlick &copy; 2025 - Gagnez de l'argent réel facilement</p>
-            <p><small>En utilisant ce site, vous acceptez nos conditions d'utilisation.</small></p>
+            <p>Africlick &copy; 2025 - Gagnez de l'argent réel en jouant</p>
+            <p><small>En utilisant ce site, vous acceptez nos conditions d'utilisation. Jeu responsable.</small></p>
         </div>
     </footer>
 
     <script>
         // Configuration
         const config = {
-            minWithdraw: 500, // 500 points = 5€
-            pointsToMoneyRatio: 100, // 100 points = 1€
+            minDeposit: 1000, // 1000 FCFA = 10 points
+            minWithdraw: 10,  // 10 points = 1000 FCFA
+            pointsToMoneyRatio: 0.1, // 1000 FCFA = 10 points
             wheelAttemptsPerDay: 1,
-            offerWallIds: {
-                cpaGrip: 'YOUR_CPAGRIP_ID', // Remplacez par votre ID CPAGrip
-                ogAds: 'YOUR_OGADS_ID',     // Remplacez par votre ID OGAds
-                adWorkMedia: 'YOUR_AWM_ID'   // Remplacez par votre ID AdWorkMedia
-            },
-            airtelMoneyApiKey: 'YOUR_AIRTEL_API_KEY' // Remplacez par votre clé API Airtel
+            referralBonus: 20, // Points bonus pour parrainage
+            soundEnabled: true,
+            games: [
+                {
+                    id: 1,
+                    title: "Aviator",
+                    description: "Parier sur un multiplicateur avant que l'avion ne décolle",
+                    icon: "fas fa-plane",
+                    minBet: 1,
+                    crashPointMin: 1.0,
+                    crashPointMax: 10.0,
+                    speed: 2
+                },
+                {
+                    id: 2,
+                    title: "JetX",
+                    description: "Parier sur un multiplicateur avant que le jet n'explose",
+                    icon: "fas fa-rocket",
+                    minBet: 1,
+                    crashPointMin: 1.0,
+                    crashPointMax: 15.0,
+                    speed: 3,
+                    obstacleFrequency: 0.02
+                },
+                {
+                    id: 3,
+                    title: "Plinko",
+                    description: "Lâchez une bille et gagnez selon où elle atterrit",
+                    icon: "fas fa-bullseye",
+                    minBet: 1,
+                    rows: 8,
+                    pegSpacing: 30,
+                    ballSpeed: 5,
+                    multipliers: [0.5, 1, 2, 3, 5]
+                },
+                {
+                    id: 4,
+                    title: "Dice",
+                    description: "Devinez si le dé sera plus haut ou plus bas que votre cible",
+                    icon: "fas fa-dice",
+                    minBet: 1
+                },
+                {
+                    id: 5,
+                    title: "Mines",
+                    description: "Trouvez des diamants sans tomber sur une mine",
+                    icon: "fas fa-bomb",
+                    minBet: 1,
+                    gridSize: 5,
+                    mineProbability: 0.2,
+                    maxMines: 5
+                },
+                {
+                    id: 6,
+                    title: "Limbo",
+                    description: "Devinez si le multiplicateur sera plus bas que votre cible",
+                    icon: "fas fa-chart-line",
+                    minBet: 1
+                },
+                {
+                    id: 7,
+                    title: "Crazy Time",
+                    description: "Jeu de roue avec bonus et multiplicateurs fous",
+                    icon: "fas fa-redo",
+                    minBet: 1
+                },
+                {
+                    id: 8,
+                    title: "Sweet Bonanza",
+                    description: "Jeu de bonbons avec cascades et multiplicateurs",
+                    icon: "fas fa-candy-cane",
+                    minBet: 1
+                },
+                {
+                    id: 9,
+                    title: "Book of Ra",
+                    description: "Jeu de machines à sous avec tours gratuits",
+                    icon: "fas fa-book",
+                    minBet: 1
+                },
+                {
+                    id: 10,
+                    title: "Roulette Live",
+                    description: "Roulette en direct avec croupier réel",
+                    icon: "fas fa-chess-queen",
+                    minBet: 1
+                }
+            ]
         };
         
         // Données simulées
         let currentUser = null;
         let users = JSON.parse(localStorage.getItem('africlick_users')) || [];
-        let verificationCodes = JSON.parse(localStorage.getItem('africlick_verification_codes')) || {};
-        let tasks = [
-            {
-                id: 1,
-                title: "Regarder une publicité",
-                description: "Regardez une vidéo publicitaire de 30 secondes",
-                points: 10,
-                type: "ad",
-                icon: "fas fa-ad"
-            },
-            {
-                id: 2,
-                title: "Tester une application",
-                description: "Installez et utilisez l'application pendant 1 minute",
-                points: 50,
-                type: "app",
-                icon: "fas fa-mobile-alt"
-            },
-            {
-                id: 3,
-                title: "Visiter un site web",
-                description: "Restez sur le site pendant au moins 30 secondes",
-                points: 15,
-                type: "visit",
-                icon: "fas fa-globe"
-            },
-            {
-                id: 4,
-                title: "Partager sur Facebook",
-                description: "Partagez notre lien sur votre profil",
-                points: 20,
-                type: "share",
-                icon: "fas fa-share-alt"
-            },
-            {
-                id: 5,
-                title: "Inviter un ami",
-                description: "Parrainez un ami qui s'inscrit et complète une tâche",
-                points: 100,
-                type: "referral",
-                icon: "fas fa-user-friends"
-            }
-        ];
+        let deposits = JSON.parse(localStorage.getItem('africlick_deposits')) || [];
+        let withdrawals = JSON.parse(localStorage.getItem('africlick_withdrawals')) || [];
+        let referrals = JSON.parse(localStorage.getItem('africlick_referrals')) || [];
+        
+        // Variables de jeu
+        let currentGame = null;
+        let gameInterval = null;
+        let currentMultiplier = 1.0;
+        let currentBet = 0;
+        let gameStarted = false;
+        let minesGameState = [];
+        let selectedMinesCount = 0;
+        let diamondsFound = 0;
         
         // Éléments du DOM
         const authForms = document.getElementById('authForms');
-        const verificationContainer = document.getElementById('verificationContainer');
-        const userEmailDisplay = document.getElementById('userEmailDisplay');
-        const verificationForm = document.getElementById('verificationForm');
-        const verificationCode = document.getElementById('verificationCode');
-        const resendCodeBtn = document.getElementById('resendCodeBtn');
         const dashboard = document.getElementById('dashboard');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const usernameDisplay = document.getElementById('usernameDisplay');
         const pointsDisplay = document.getElementById('pointsDisplay');
         const logoutBtn = document.getElementById('logoutBtn');
-        const tasksContainer = document.getElementById('tasksContainer');
+        const gamesContainer = document.getElementById('gamesContainer');
         const historyTable = document.getElementById('historyTable');
         const wheelBtn = document.getElementById('wheelBtn');
         const wheelContainer = document.getElementById('wheelContainer');
         const spinWheelBtn = document.getElementById('spinWheelBtn');
         const wheelAttemptsDisplay = document.getElementById('wheelAttempts');
+        const wheelMultiplierDisplay = document.getElementById('wheelMultiplier');
+        const depositBtn = document.getElementById('depositBtn');
         const withdrawBtn = document.getElementById('withdrawBtn');
+        const referralBtn = document.getElementById('referralBtn');
+        const depositModal = document.getElementById('depositModal');
         const withdrawModal = document.getElementById('withdrawModal');
-        const closeModal = document.querySelector('.close-modal');
+        const referralModal = document.getElementById('referralModal');
+        const closeModals = document.querySelectorAll('.close-modal');
+        const depositForm = document.getElementById('depositForm');
         const withdrawForm = document.getElementById('withdrawForm');
+        const depositAmount = document.getElementById('depositAmount');
+        const depositPhone = document.getElementById('depositPhone');
+        const depositMethod = document.getElementById('depositMethod');
         const withdrawAmount = document.getElementById('withdrawAmount');
         const withdrawMethod = document.getElementById('withdrawMethod');
         const withdrawPhone = document.getElementById('withdrawPhone');
+        const submitDeposit = document.getElementById('submitDeposit');
         const submitWithdraw = document.getElementById('submitWithdraw');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notificationText');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
-        const tasksTab = document.getElementById('tasksTab');
-        const offersTab = document.getElementById('offersTab');
-        const surveysTab = document.getElementById('surveysTab');
-        const offerIframe = document.getElementById('offerIframe');
-        const surveyIframe = document.getElementById('surveyIframe');
+        const gamesTab = document.getElementById('gamesTab');
+        const historyTab = document.getElementById('historyTab');
+        const methodBtns = document.querySelectorAll('.method-btn');
+        const referralCodeDisplay = document.getElementById('referralCodeDisplay');
+        const userReferralCode = document.getElementById('userReferralCode');
+        const copyReferralBtn = document.getElementById('copyReferralBtn');
+        const referralsTable = document.getElementById('referralsTable');
+        const referralCodeInput = document.getElementById('referralCode');
+        const gameModal = document.getElementById('gameModal');
+        const gameModalTitle = document.getElementById('gameModalTitle');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gameBetAmount = document.getElementById('gameBetAmount');
+        const gameBetBtn = document.getElementById('gameBetBtn');
+        const gameCashoutBtn = document.getElementById('gameCashoutBtn');
+        const gameBalanceDisplay = document.getElementById('gameBalanceDisplay');
+        const gameLastWin = document.getElementById('gameLastWin');
+        const gameNotification = document.getElementById('gameNotification');
+        const soundToggle = document.getElementById('soundToggle');
+        const winSound = document.getElementById('winSound');
+        const loseSound = document.getElementById('loseSound');
+        const clickSound = document.getElementById('clickSound');
+        const explosionSound = document.getElementById('explosionSound');
+        const coinSound = document.getElementById('coinSound');
         
         // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             setupEventListeners();
-            loadOfferWalls();
+            renderGames();
         });
         
         function setupEventListeners() {
@@ -948,30 +1787,68 @@
             registerForm.addEventListener('submit', handleRegister);
             logoutBtn.addEventListener('click', handleLogout);
             
-            // Vérification
-            verificationForm.addEventListener('submit', handleVerification);
-            resendCodeBtn.addEventListener('click', handleResendCode);
-            
             // Roue de la chance
             wheelBtn.addEventListener('click', toggleWheel);
             spinWheelBtn.addEventListener('click', spinWheel);
             
-            // Retraits
+            // Dépôts et retraits
+            depositBtn.addEventListener('click', () => depositModal.style.display = 'flex');
             withdrawBtn.addEventListener('click', openWithdrawModal);
-            closeModal.addEventListener('click', closeWithdrawModal);
+            referralBtn.addEventListener('click', openReferralModal);
+            
+            closeModals.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    depositModal.style.display = 'none';
+                    withdrawModal.style.display = 'none';
+                    referralModal.style.display = 'none';
+                    gameModal.style.display = 'none';
+                    resetGame();
+                });
+            });
+            
+            // Méthodes de paiement
+            methodBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const method = btn.dataset.method;
+                    methodBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    if (btn.closest('#depositForm')) {
+                        depositMethod.value = method;
+                    } else if (btn.closest('#withdrawForm')) {
+                        withdrawMethod.value = method;
+                    }
+                });
+            });
+            
+            depositForm.addEventListener('submit', handleDeposit);
             withdrawForm.addEventListener('submit', handleWithdraw);
+            
+            // Parrainage
+            copyReferralBtn.addEventListener('click', copyReferralCode);
             
             // Onglets
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => switchTab(tab.dataset.tab));
             });
             
-            // Clic en dehors de la modal pour la fermer
+            // Clic en dehors des modals pour les fermer
             window.addEventListener('click', (e) => {
-                if (e.target === withdrawModal) {
-                    closeWithdrawModal();
+                if (e.target === depositModal) depositModal.style.display = 'none';
+                if (e.target === withdrawModal) withdrawModal.style.display = 'none';
+                if (e.target === referralModal) referralModal.style.display = 'none';
+                if (e.target === gameModal) {
+                    gameModal.style.display = 'none';
+                    resetGame();
                 }
             });
+            
+            // Contrôles de jeu
+            gameBetBtn.addEventListener('click', startGame);
+            gameCashoutBtn.addEventListener('click', cashoutGame);
+            
+            // Sound toggle
+            soundToggle.addEventListener('click', toggleSound);
         }
         
         function checkAuth() {
@@ -990,11 +1867,6 @@
             const user = users.find(u => u.phone === phone && u.password === password);
             
             if (user) {
-                if (!user.verified) {
-                    showNotification('Veuillez vérifier votre compte avant de vous connecter', 'error');
-                    return;
-                }
-                
                 currentUser = user;
                 localStorage.setItem('africlick_currentUser', JSON.stringify(user));
                 showDashboard();
@@ -1008,21 +1880,28 @@
         
         function handleRegister(e) {
             e.preventDefault();
-            const username = document.getElementById('registerUsername').value;
-            const phone = document.getElementById('registerPhone').value;
-            const email = document.getElementById('registerEmail').value;
+            const username = document.getElementById('registerUsername').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
             const password = document.getElementById('registerPassword').value;
+            const referralCode = document.getElementById('referralCode').value.trim();
             
-            // Validation simple
-            if (!phone.match(/^[0-9]{9}$/)) {
-                showNotification('Numéro de téléphone invalide', 'error');
+            // Validation
+            if (!username || username.length < 3) {
+                showNotification('Le pseudo doit contenir au moins 3 caractères', 'error');
                 registerForm.classList.add('shake');
                 setTimeout(() => registerForm.classList.remove('shake'), 500);
                 return;
             }
             
-            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                showNotification('Adresse e-mail invalide', 'error');
+            if (!phone.match(/^[0-9]{9}$/)) {
+                showNotification('Numéro de téléphone invalide (9 chiffres requis)', 'error');
+                registerForm.classList.add('shake');
+                setTimeout(() => registerForm.classList.remove('shake'), 500);
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Le mot de passe doit contenir au moins 6 caractères', 'error');
                 registerForm.classList.add('shake');
                 setTimeout(() => registerForm.classList.remove('shake'), 500);
                 return;
@@ -1035,226 +1914,1440 @@
                 return;
             }
             
-            if (users.some(u => u.email === email)) {
-                showNotification('Cette adresse e-mail est déjà utilisée', 'error');
-                registerForm.classList.add('shake');
-                setTimeout(() => registerForm.classList.remove('shake'), 500);
-                return;
-            }
+            // Générer un code de parrainage unique
+            const referralCodeForUser = generateReferralCode(username);
             
-            // Générer un code de vérification
-            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            const verificationExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
-            
-            // Enregistrer le code temporairement
-            verificationCodes[email] = {
-                code: verificationCode,
-                expires: verificationExpiry
-            };
-            localStorage.setItem('africlick_verification_codes', JSON.stringify(verificationCodes));
-            
-            // Envoyer le code par e-mail (simulation)
-            sendVerificationEmail(email, verificationCode);
-            
-            // Créer un nouvel utilisateur (non vérifié)
             const newUser = {
                 id: Date.now(),
                 username,
                 phone,
-                email,
                 password,
-                verified: false,
-                points: 50, // Bonus d'inscription
+                points: 0,
+                referralCode: referralCodeForUser,
+                totalDeposited: 0,
+                wheelMultiplier: 1,
                 history: [],
                 lastWheelSpin: null,
                 wheelAttemptsLeft: config.wheelAttemptsPerDay
             };
             
+            // Gérer le parrainage si un code a été fourni
+            if (referralCode) {
+                const referrer = users.find(u => u.referralCode === referralCode);
+                if (referrer) {
+                    referrals.push({
+                        referrerId: referrer.id,
+                        refereeId: newUser.id,
+                        refereeUsername: username,
+                        date: new Date().toISOString(),
+                        bonusGiven: false
+                    });
+                    localStorage.setItem('africlick_referrals', JSON.stringify(referrals));
+                    
+                    showNotification(`Inscription avec parrainage réussie! Le bonus sera crédité après votre premier dépôt.`, 'success');
+                } else {
+                    showNotification('Code de parrainage invalide', 'warning');
+                }
+            }
+            
             users.push(newUser);
             localStorage.setItem('africlick_users', JSON.stringify(users));
             
-            // Afficher le formulaire de vérification
-            authForms.style.display = 'none';
-            verificationContainer.style.display = 'block';
-            userEmailDisplay.textContent = email;
+            currentUser = newUser;
+            localStorage.setItem('africlick_currentUser', JSON.stringify(newUser));
+            showDashboard();
+            showNotification('Inscription réussie!', 'success');
             
-            // Stocker temporairement l'utilisateur pour la vérification
-            localStorage.setItem('africlick_temp_user', JSON.stringify(newUser));
-            
-            showNotification('Code de vérification envoyé à votre adresse e-mail', 'success');
+            // Réinitialiser le formulaire
+            registerForm.reset();
         }
         
-        function sendVerificationEmail(email, code) {
-            // En production, vous utiliseriez nodemailer comme dans server.js
-            console.log(`Email envoyé à ${email} avec le code: ${code}`);
-            // Simuler l'envoi d'e-mail
-        }
-        
-        function handleVerification(e) {
-            e.preventDefault();
-            const code = verificationCode.value;
-            const tempUser = JSON.parse(localStorage.getItem('africlick_temp_user'));
-            
-            if (!tempUser) {
-                showNotification('Session expirée, veuillez vous réinscrire', 'error');
-                verificationContainer.style.display = 'none';
-                authForms.style.display = 'flex';
-                return;
-            }
-            
-            const storedCode = verificationCodes[tempUser.email];
-            
-            if (!storedCode || storedCode.code !== code) {
-                showNotification('Code de vérification incorrect', 'error');
-                verificationForm.classList.add('shake');
-                setTimeout(() => verificationForm.classList.remove('shake'), 500);
-                return;
-            }
-            
-            if (Date.now() > storedCode.expires) {
-                showNotification('Le code a expiré, veuillez en demander un nouveau', 'error');
-                return;
-            }
-            
-            // Marquer l'utilisateur comme vérifié
-            const userIndex = users.findIndex(u => u.id === tempUser.id);
-            if (userIndex !== -1) {
-                users[userIndex].verified = true;
-                localStorage.setItem('africlick_users', JSON.stringify(users));
-                
-                // Supprimer le code utilisé
-                delete verificationCodes[tempUser.email];
-                localStorage.setItem('africlick_verification_codes', JSON.stringify(verificationCodes));
-                
-                // Connecter l'utilisateur
-                currentUser = users[userIndex];
-                localStorage.setItem('africlick_currentUser', JSON.stringify(currentUser));
-                localStorage.removeItem('africlick_temp_user');
-                
-                // Afficher le tableau de bord
-                verificationContainer.style.display = 'none';
-                showDashboard();
-                showNotification('Compte vérifié avec succès! 50 points offerts!', 'success');
-            } else {
-                showNotification('Erreur lors de la vérification', 'error');
-            }
-        }
-        
-        function handleResendCode() {
-            const tempUser = JSON.parse(localStorage.getItem('africlick_temp_user'));
-            
-            if (!tempUser) {
-                showNotification('Session expirée, veuillez vous réinscrire', 'error');
-                verificationContainer.style.display = 'none';
-                authForms.style.display = 'flex';
-                return;
-            }
-            
-            // Générer un nouveau code
-            const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-            const newExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
-            
-            // Mettre à jour le code
-            verificationCodes[tempUser.email] = {
-                code: newCode,
-                expires: newExpiry
-            };
-            localStorage.setItem('africlick_verification_codes', JSON.stringify(verificationCodes));
-            
-            // Renvoyer le code par e-mail
-            sendVerificationEmail(tempUser.email, newCode);
-            
-            showNotification('Nouveau code envoyé à votre adresse e-mail', 'success');
+        function generateReferralCode(username) {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            return `${username.substring(0, 3).toUpperCase()}${randomNum}`;
         }
         
         function handleLogout() {
             currentUser = null;
             localStorage.removeItem('africlick_currentUser');
             authForms.style.display = 'flex';
-            verificationContainer.style.display = 'none';
             dashboard.style.display = 'none';
             wheelContainer.style.display = 'none';
             
             // Réinitialiser les formulaires
             loginForm.reset();
             registerForm.reset();
-            verificationForm.reset();
             
             showNotification('Déconnexion réussie', 'success');
         }
         
         function showDashboard() {
             authForms.style.display = 'none';
-            verificationContainer.style.display = 'none';
             dashboard.style.display = 'block';
             
             // Mettre à jour les informations utilisateur
             usernameDisplay.textContent = currentUser.username;
             pointsDisplay.textContent = currentUser.points;
+            gameBalanceDisplay.textContent = currentUser.points;
             wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft || 0;
+            wheelMultiplierDisplay.textContent = currentUser.wheelMultiplier || 1;
             
             // Vérifier les tentatives de roue
             checkWheelAttempts();
             
-            // Afficher les tâches
-            renderTasks();
-            
             // Afficher l'historique
             renderHistory();
+            
+            // Mettre à jour le code de parrainage
+            if (currentUser.referralCode) {
+                userReferralCode.textContent = currentUser.referralCode;
+            }
+            
+            // Mettre à jour la table des filleuls
+            renderReferralsTable();
         }
         
-        function renderTasks() {
-            tasksContainer.innerHTML = '';
+        function renderGames() {
+            gamesContainer.innerHTML = '';
             
-            tasks.forEach(task => {
-                const taskCard = document.createElement('div');
-                taskCard.className = 'task-card fade-in';
-                if (task.type === 'referral') {
-                    taskCard.classList.add('highlight');
-                }
+            config.games.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card fade-in';
                 
-                taskCard.innerHTML = `
-                    ${task.type === 'referral' ? '<span class="task-badge">Bonus</span>' : ''}
-                    <h3><i class="${task.icon}"></i> ${task.title}</h3>
-                    <p>${task.description}</p>
-                    <p class="reward"><i class="fas fa-coins"></i> Récompense: ${task.points} points</p>
-                    <button data-id="${task.id}"><i class="fas fa-play"></i> Commencer</button>
+                gameCard.innerHTML = `
+                    <h3><i class="${game.icon}"></i> ${game.title}</h3>
+                    <p>${game.description}</p>
+                    <p class="reward"><i class="fas fa-coins"></i> Mise min: ${game.minBet} point</p>
+                    <button data-id="${game.id}"><i class="fas fa-play"></i> Jouer</button>
                 `;
                 
-                taskCard.querySelector('button').addEventListener('click', () => startTask(task.id));
-                tasksContainer.appendChild(taskCard);
+                gameCard.querySelector('button').addEventListener('click', () => openGame(game));
+                gamesContainer.appendChild(gameCard);
             });
         }
         
-        function startTask(taskId) {
-            const task = tasks.find(t => t.id === taskId);
-            if (!task) return;
+        function openGame(game) {
+            currentGame = game;
+            gameModalTitle.textContent = game.title;
+            gameCanvas.innerHTML = `<h3>${game.title}</h3><p>${game.description}</p>`;
+            gameCanvas.id = `${game.title.toLowerCase().replace(' ', '')}Canvas`;
+            gameBetAmount.value = '';
+            gameBetAmount.min = game.minBet;
+            gameBetAmount.max = currentUser.points;
+            gameModal.style.display = 'flex';
+            gameBalanceDisplay.textContent = currentUser.points;
             
-            // Simuler l'accomplissement de la tâche
-            if (confirm(`Voulez-vous commencer la tâche: "${task.title}"?`)) {
-                // Ajouter les points
-                currentUser.points += task.points;
+            // Setup game canvas based on game type
+            switch(game.title.toLowerCase()) {
+                case 'aviator':
+                    setupAviatorGame();
+                    break;
+                case 'jetx':
+                    setupJetXGame();
+                    break;
+                case 'plinko':
+                    setupPlinkoGame();
+                    break;
+                case 'mines':
+                    setupMinesGame();
+                    break;
+                case 'dice':
+                    setupDiceGame();
+                    break;
+                case 'limbo':
+                    setupLimboGame();
+                    break;
+                case 'crazy time':
+                    setupCrazyTimeGame();
+                    break;
+                case 'sweet bonanza':
+                    setupSweetBonanzaGame();
+                    break;
+                case 'book of ra':
+                    setupBookOfRaGame();
+                    break;
+                case 'roulette live':
+                    setupRouletteGame();
+                    break;
+            }
+        }
+        
+        // Game setup functions
+        function setupAviatorGame() {
+            gameCanvas.innerHTML = `
+                <div class="airplane" id="airplane"><i class="fas fa-plane"></i></div>
+                <div class="multiplier-display" id="multiplierDisplay">1.00x</div>
+            `;
+            
+            // Create clouds
+            for (let i = 0; i < 10; i++) {
+                createCloud();
+            }
+        }
+        
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            
+            const size = Math.random() * 50 + 30;
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const opacity = Math.random() * 0.5 + 0.3;
+            
+            cloud.style.width = `${size}px`;
+            cloud.style.height = `${size/2}px`;
+            cloud.style.left = `${left}%`;
+            cloud.style.top = `${top}%`;
+            cloud.style.opacity = opacity;
+            
+            gameCanvas.appendChild(cloud);
+            
+            // Animate cloud
+            gsap.to(cloud, {
+                x: Math.random() * 100 - 50,
+                y: Math.random() * 100 - 50,
+                duration: Math.random() * 20 + 10,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+        
+        function setupJetXGame() {
+            gameCanvas.innerHTML = `
+                <div class="jet" id="jet"><i class="fas fa-rocket"></i></div>
+                <div class="multiplier-display" id="multiplierDisplay">1.00x</div>
+            `;
+        }
+        
+        function setupPlinkoGame() {
+            const gameConfig = config.games.find(g => g.title === 'Plinko');
+            
+            gameCanvas.innerHTML = '';
+            
+            // Create pegs
+            for (let row = 0; row < gameConfig.rows; row++) {
+                for (let col = 0; col < row + 1; col++) {
+                    const peg = document.createElement('div');
+                    peg.className = 'peg';
+                    peg.style.left = `${50 + (col - row/2) * gameConfig.pegSpacing}px`;
+                    peg.style.top = `${row * gameConfig.pegSpacing + 20}px`;
+                    gameCanvas.appendChild(peg);
+                }
+            }
+            
+            // Create buckets at the bottom
+            const bucketCount = gameConfig.rows + 1;
+            const bucketWidth = gameCanvas.offsetWidth / bucketCount;
+            
+            for (let i = 0; i < bucketCount; i++) {
+                const bucket = document.createElement('div');
+                bucket.className = 'plinko-bucket';
+                bucket.style.left = `${i * bucketWidth + (bucketWidth - 80)/2}px`;
+                bucket.textContent = `${gameConfig.multipliers[i % gameConfig.multipliers.length]}x`;
+                bucket.dataset.multiplier = gameConfig.multipliers[i % gameConfig.multipliers.length];
+                gameCanvas.appendChild(bucket);
+            }
+        }
+        
+        function setupMinesGame() {
+            const gameConfig = config.games.find(g => g.title === 'Mines');
+            
+            minesGameState = [];
+            selectedMinesCount = 0;
+            diamondsFound = 0;
+            
+            gameCanvas.innerHTML = '';
+            gameCanvas.style.display = 'grid';
+            gameCanvas.style.gridTemplateColumns = `repeat(${gameConfig.gridSize}, 1fr)`;
+            gameCanvas.style.gap = '10px';
+            gameCanvas.style.padding = '10px';
+            
+            // Create mine field
+            for (let i = 0; i < gameConfig.gridSize * gameConfig.gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'mine-cell';
+                cell.dataset.index = i;
+                
+                // Determine if this cell is a mine
+                const isMine = Math.random() < gameConfig.mineProbability && 
+                               selectedMinesCount < gameConfig.maxMines;
+                
+                if (isMine) {
+                    minesGameState[i] = 'mine';
+                    selectedMinesCount++;
+                } else {
+                    minesGameState[i] = 'diamond';
+                }
+                
+                cell.addEventListener('click', () => handleMineClick(i));
+                gameCanvas.appendChild(cell);
+            }
+        }
+        
+        function setupDiceGame() {
+            gameCanvas.innerHTML = `
+                <div class="dice" id="diceValue">1</div>
+                <div class="dice-buttons">
+                    <button id="diceHigher"><i class="fas fa-arrow-up"></i> Plus haut</button>
+                    <button id="diceLower"><i class="fas fa-arrow-down"></i> Plus bas</button>
+                </div>
+            `;
+            
+            document.getElementById('diceHigher').addEventListener('click', () => playDiceGame('higher'));
+            document.getElementById('diceLower').addEventListener('click', () => playDiceGame('lower'));
+        }
+        
+        function setupLimboGame() {
+            gameCanvas.innerHTML = `
+                <div class="limbo-bar">
+                    <div class="limbo-ball" id="limboBall"></div>
+                </div>
+                <input type="number" id="limboTarget" placeholder="Cible (ex: 2.5)" min="1.01" step="0.1">
+            `;
+        }
+        
+        function setupCrazyTimeGame() {
+            gameCanvas.innerHTML = `
+                <div class="crazy-wheel">
+                    <div class="crazy-pointer"></div>
+                </div>
+                <button id="spinCrazyWheel"><i class="fas fa-sync-alt"></i> Tourner</button>
+            `;
+            
+            document.getElementById('spinCrazyWheel').addEventListener('click', spinCrazyWheel);
+        }
+        
+        function setupSweetBonanzaGame() {
+            gameCanvas.innerHTML = '';
+            gameCanvas.style.display = 'grid';
+            gameCanvas.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            gameCanvas.style.gap = '10px';
+            gameCanvas.style.padding = '10px';
+            
+            const symbols = ['🍒', '🍋', '🍊', '🍇', '🍉', '🍓', '7️⃣'];
+            
+            for (let i = 0; i < 15; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'bonanza-cell';
+                cell.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                gameCanvas.appendChild(cell);
+            }
+        }
+        
+        function setupBookOfRaGame() {
+            gameCanvas.innerHTML = `
+                <div class="slot-machine">
+                    <div class="slot-reel" id="reel1">
+                        <div class="slot-symbol">7</div>
+                    </div>
+                    <div class="slot-reel" id="reel2">
+                        <div class="slot-symbol">7</div>
+                    </div>
+                    <div class="slot-reel" id="reel3">
+                        <div class="slot-symbol">7</div>
+                    </div>
+                </div>
+                <button id="spinSlots"><i class="fas fa-sync-alt"></i> Tourner</button>
+            `;
+            
+            document.getElementById('spinSlots').addEventListener('click', spinSlots);
+        }
+        
+        function setupRouletteGame() {
+            gameCanvas.innerHTML = `
+                <div class="roulette-wheel">
+                    <div class="roulette-ball"></div>
+                </div>
+                <div class="roulette-buttons">
+                    <button id="betRed">Rouge</button>
+                    <button id="betBlack">Noir</button>
+                    <button id="betGreen">Vert</button>
+                </div>
+            `;
+            
+            document.getElementById('betRed').addEventListener('click', () => playRoulette('red'));
+            document.getElementById('betBlack').addEventListener('click', () => playRoulette('black'));
+            document.getElementById('betGreen').addEventListener('click', () => playRoulette('green'));
+        }
+        
+        function startGame() {
+            const amount = parseInt(gameBetAmount.value);
+            
+            if (!amount || amount < currentGame.minBet) {
+                showGameNotification(`La mise minimale est de ${currentGame.minBet} point`, 'error');
+                return;
+            }
+            
+            if (amount > currentUser.points) {
+                showGameNotification('Vous n\'avez pas assez de points', 'error');
+                return;
+            }
+            
+            currentBet = amount;
+            currentUser.points -= amount;
+            updateUserData();
+            pointsDisplay.textContent = currentUser.points;
+            gameBalanceDisplay.textContent = currentUser.points;
+            
+            // Play sound
+            playSound(coinSound);
+            
+            // Ajouter à l'historique
+            const now = new Date();
+            const gameHistory = {
+                date: now.toLocaleString(),
+                game: currentGame.title,
+                points: -amount,
+                status: 'Mise placée'
+            };
+            
+            currentUser.history.unshift(gameHistory);
+            updateUserData();
+            renderHistory();
+            
+            // Démarrer le jeu
+            gameStarted = true;
+            currentMultiplier = 1.0;
+            gameBetBtn.disabled = true;
+            gameCashoutBtn.style.display = 'block';
+            
+            // Start the specific game
+            switch(currentGame.title.toLowerCase()) {
+                case 'aviator':
+                    startAviatorGame();
+                    break;
+                case 'jetx':
+                    startJetXGame();
+                    break;
+                case 'plinko':
+                    startPlinkoGame();
+                    break;
+                case 'mines':
+                    // Mines game starts immediately when clicking cells
+                    break;
+                case 'dice':
+                    // Dice game starts with button clicks
+                    break;
+                case 'limbo':
+                    startLimboGame();
+                    break;
+                case 'crazy time':
+                    // Already handled by button
+                    break;
+                case 'sweet bonanza':
+                    startSweetBonanzaGame();
+                    break;
+                case 'book of ra':
+                    // Already handled by button
+                    break;
+                case 'roulette live':
+                    // Already handled by buttons
+                    break;
+            }
+        }
+        
+        function startAviatorGame() {
+            const airplane = document.getElementById('airplane');
+            const multiplierDisplay = document.getElementById('multiplierDisplay');
+            
+            airplane.style.top = '0px';
+            currentMultiplier = 1.0;
+            multiplierDisplay.textContent = '1.00x';
+            multiplierDisplay.style.color = 'white';
+            
+            let position = 0;
+            let crashed = false;
+            const crashPoint = Math.random() * (currentGame.crashPointMax - currentGame.crashPointMin) + currentGame.crashPointMin;
+            
+            // Animate airplane takeoff
+            gsap.from(airplane, {
+                scale: 0.5,
+                rotation: -30,
+                duration: 0.5,
+                ease: "back.out"
+            });
+            
+            gameInterval = setInterval(() => {
+                if (crashed) return;
+                
+                position += currentGame.speed;
+                currentMultiplier = (position / 100) + 1;
+                multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'x';
+                
+                airplane.style.top = `${position}px`;
+                
+                // Add some turbulence
+                if (Math.random() < 0.1) {
+                    gsap.to(airplane, {
+                        rotation: (Math.random() * 20 - 10),
+                        duration: 0.3,
+                        yoyo: true,
+                        repeat: 1
+                    });
+                }
+                
+                // Random chance to crash
+                if (currentMultiplier >= crashPoint || (currentMultiplier > 1.5 && Math.random() < 0.01)) {
+                    crashed = true;
+                    endAviatorGame();
+                }
+            }, 100);
+        }
+        
+        function startJetXGame() {
+            const jet = document.getElementById('jet');
+            const multiplierDisplay = document.getElementById('multiplierDisplay');
+            
+            jet.style.left = '50px';
+            jet.style.top = '50%';
+            currentMultiplier = 1.0;
+            multiplierDisplay.textContent = '1.00x';
+            multiplierDisplay.style.color = 'white';
+            
+            let position = 0;
+            let crashed = false;
+            const crashPoint = Math.random() * (currentGame.crashPointMax - currentGame.crashPointMin) + currentGame.crashPointMin;
+            
+            // Animate jet takeoff
+            gsap.from(jet, {
+                scale: 0.5,
+                rotation: -10,
+                duration: 0.5,
+                ease: "back.out"
+            });
+            
+            gameInterval = setInterval(() => {
+                if (crashed) return;
+                
+                position += currentGame.speed;
+                currentMultiplier = (position / 100) + 1;
+                multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'x';
+                
+                jet.style.left = `${50 + position}px`;
+                
+                // Create obstacles
+                if (Math.random() < currentGame.obstacleFrequency) {
+                    createObstacle(position + 500);
+                }
+                
+                // Check for crash
+                if (currentMultiplier >= crashPoint || (currentMultiplier > 2 && Math.random() < 0.01)) {
+                    crashed = true;
+                    endJetXGame();
+                }
+            }, 100);
+        }
+        
+        function createObstacle(position) {
+            const obstacle = document.createElement('div');
+            obstacle.className = 'obstacle';
+            
+            const height = Math.random() * 100 + 50;
+            const top = Math.random() * (gameCanvas.offsetHeight - height);
+            
+            obstacle.style.width = '30px';
+            obstacle.style.height = `${height}px`;
+            obstacle.style.left = `${position}px`;
+            obstacle.style.top = `${top}px`;
+            
+            gameCanvas.appendChild(obstacle);
+            
+            // Animate obstacle
+            gsap.to(obstacle, {
+                x: -600,
+                duration: 5,
+                onComplete: () => {
+                    obstacle.remove();
+                }
+            });
+        }
+        
+        function startPlinkoGame() {
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.style.left = `${gameCanvas.offsetWidth/2 - 10}px`;
+            ball.style.top = '0px';
+            gameCanvas.appendChild(ball);
+            
+            // Animate ball drop
+            let posX = gameCanvas.offsetWidth/2 - 10;
+            let posY = 0;
+            let velocityX = 0;
+            let velocityY = 0;
+            
+            const animateBall = () => {
+                posY += currentGame.ballSpeed;
+                velocityY += 0.2;
+                
+                // Check for collisions with pegs
+                document.querySelectorAll('.peg').forEach(peg => {
+                    const pegRect = peg.getBoundingClientRect();
+                    const ballRect = {
+                        left: posX,
+                        top: posY,
+                        right: posX + 20,
+                        bottom: posY + 20
+                    };
+                    
+                    if (ballRect.right > pegRect.left && 
+                        ballRect.left < pegRect.right && 
+                        ballRect.bottom > pegRect.top && 
+                        ballRect.top < pegRect.bottom) {
+                        
+                        // Calculate collision response
+                        const pegCenterX = pegRect.left + pegRect.width/2;
+                        const pegCenterY = pegRect.top + pegRect.height/2;
+                        
+                        // Bounce off peg
+                        const dx = (posX + 10) - pegCenterX;
+                        const dy = (posY + 10) - pegCenterY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 16) { // Collision detected
+                            // Play sound
+                            playSound(clickSound);
+                            
+                            // Bounce effect
+                            velocityX = dx * 0.2;
+                            velocityY = dy * 0.2;
+                            
+                            // Visual effect
+                            gsap.to(peg, {
+                                scale: 1.3,
+                                duration: 0.1,
+                                yoyo: true,
+                                repeat: 1
+                            });
+                        }
+                    }
+                });
+                
+                // Apply velocity
+                posX += velocityX;
+                posY += velocityY;
+                
+                // Apply friction
+                velocityX *= 0.98;
+                velocityY *= 0.98;
+                
+                // Apply gravity
+                velocityY += 0.2;
+                
+                // Update ball position
+                ball.style.left = `${posX}px`;
+                ball.style.top = `${posY}px`;
+                
+                // Check if ball reached bottom
+                if (posY > gameCanvas.offsetHeight - 30) {
+                    // Determine which bucket the ball landed in
+                    const buckets = document.querySelectorAll('.plinko-bucket');
+                    let winningBucket = null;
+                    
+                    buckets.forEach(bucket => {
+                        const bucketRect = bucket.getBoundingClientRect();
+                        if (posX + 10 > bucketRect.left && posX + 10 < bucketRect.right) {
+                            winningBucket = bucket;
+                        }
+                    });
+                    
+                    if (winningBucket) {
+                        const multiplier = parseFloat(winningBucket.dataset.multiplier);
+                        const winnings = Math.floor(currentBet * multiplier);
+                        
+                        // Highlight winning bucket
+                        gsap.to(winningBucket, {
+                            backgroundColor: 'var(--success)',
+                            duration: 0.5,
+                            yoyo: true,
+                            repeat: 1
+                        });
+                        
+                        // Show result
+                        setTimeout(() => {
+                            currentUser.points += winnings;
+                            updateUserData();
+                            gameBalanceDisplay.textContent = currentUser.points;
+                            pointsDisplay.textContent = currentUser.points;
+                            gameLastWin.textContent = winnings;
+                            
+                            // Add to history
+                            const now = new Date();
+                            const gameHistory = {
+                                date: now.toLocaleString(),
+                                game: currentGame.title,
+                                points: winnings,
+                                status: 'Gagné'
+                            };
+                            
+                            currentUser.history.unshift(gameHistory);
+                            updateUserData();
+                            renderHistory();
+                            
+                            showGameNotification(`Félicitations! Vous avez gagné ${winnings} points (${multiplier}x)!`, 'success');
+                            playSound(winSound);
+                            resetGameControls();
+                        }, 1000);
+                    }
+                    
+                    // Remove ball
+                    setTimeout(() => {
+                        ball.remove();
+                    }, 2000);
+                    
+                    return;
+                }
+                
+                requestAnimationFrame(animateBall);
+            };
+            
+            animateBall();
+        }
+        
+        function handleMineClick(index) {
+            if (!gameStarted || minesGameState[index] === 'revealed') return;
+            
+            const cell = document.querySelector(`.mine-cell[data-index="${index}"]`);
+            cell.classList.add('revealed');
+            
+            // Play sound
+            playSound(clickSound);
+            
+            if (minesGameState[index] === 'mine') {
+                // Hit a mine - game over
+                cell.innerHTML = '<i class="fas fa-bomb"></i>';
+                cell.classList.add('revealed');
+                
+                // Animate explosion
+                gsap.to(cell, {
+                    scale: 1.5,
+                    backgroundColor: 'var(--danger)',
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 1,
+                    onComplete: () => {
+                        playSound(explosionSound);
+                        
+                        // Add to history
+                        const now = new Date();
+                        const gameHistory = {
+                            date: now.toLocaleString(),
+                            game: currentGame.title,
+                            points: -currentBet,
+                            status: 'Perdu'
+                        };
+                        
+                        currentUser.history.unshift(gameHistory);
+                        updateUserData();
+                        renderHistory();
+                        
+                        showGameNotification('Dommage! Vous avez trouvé une mine.', 'error');
+                        resetGameControls();
+                    }
+                });
+            } else {
+                // Found a diamond
+                cell.innerHTML = '<i class="fas fa-gem"></i>';
+                cell.classList.add('diamond');
+                diamondsFound++;
+                
+                // Animate diamond
+                gsap.from(cell, {
+                    scale: 0,
+                    rotation: 360,
+                    duration: 0.5
+                });
+                
+                // Check if all diamonds found
+                const totalDiamonds = (currentGame.gridSize * currentGame.gridSize) - selectedMinesCount;
+                if (diamondsFound === totalDiamonds) {
+                    // Calculate winnings (2x for each diamond)
+                    const winnings = currentBet * 2 * diamondsFound;
+                    currentUser.points += winnings;
+                    
+                    // Show all mines
+                    minesGameState.forEach((cellState, i) => {
+                        if (cellState === 'mine') {
+                            const mineCell = document.querySelector(`.mine-cell[data-index="${i}"]`);
+                            mineCell.innerHTML = '<i class="fas fa-bomb"></i>';
+                            mineCell.classList.add('revealed');
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        updateUserData();
+                        gameBalanceDisplay.textContent = currentUser.points;
+                        pointsDisplay.textContent = currentUser.points;
+                        gameLastWin.textContent = winnings;
+                        
+                        // Add to history
+                        const now = new Date();
+                        const gameHistory = {
+                            date: now.toLocaleString(),
+                            game: currentGame.title,
+                            points: winnings,
+                            status: 'Gagné'
+                        };
+                        
+                        currentUser.history.unshift(gameHistory);
+                        updateUserData();
+                        renderHistory();
+                        
+                        showGameNotification(`Félicitations! Vous avez trouvé tous les diamants et gagné ${winnings} points!`, 'success');
+                        playSound(winSound);
+                        resetGameControls();
+                    }, 1000);
+                }
+            }
+            
+            minesGameState[index] = 'revealed';
+        }
+        
+        function playDiceGame(betType) {
+            const diceValue = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('diceValue').textContent = diceValue;
+            
+            let win = false;
+            if (betType === 'higher' && diceValue > 3) win = true;
+            if (betType === 'lower' && diceValue < 4) win = true;
+            
+            const multiplier = 1.95; // Payout multiplier
+            const winnings = win ? Math.floor(currentBet * multiplier) : -currentBet;
+            
+            // Update user points
+            currentUser.points += winnings;
+            updateUserData();
+            gameBalanceDisplay.textContent = currentUser.points;
+            pointsDisplay.textContent = currentUser.points;
+            
+            if (win) {
+                gameLastWin.textContent = Math.floor(currentBet * multiplier);
+                playSound(winSound);
+                showGameNotification(`Félicitations! Le dé est ${diceValue}. Vous gagnez ${Math.floor(currentBet * multiplier)} points!`, 'success');
+            } else {
+                gameLastWin.textContent = -currentBet;
+                playSound(loseSound);
+                showGameNotification(`Dommage! Le dé est ${diceValue}. Vous perdez ${currentBet} points.`, 'error');
+            }
+            
+            // Add to history
+            const now = new Date();
+            const gameHistory = {
+                date: now.toLocaleString(),
+                game: currentGame.title,
+                points: winnings,
+                status: win ? 'Gagné' : 'Perdu'
+            };
+            
+            currentUser.history.unshift(gameHistory);
+            updateUserData();
+            renderHistory();
+            
+            // Reset for next bet
+            resetGameControls();
+        }
+        
+        function startLimboGame() {
+            const target = parseFloat(document.getElementById('limboTarget').value);
+            
+            if (!target || target < 1.01) {
+                showGameNotification('Veuillez entrer une cible valide (min 1.01)', 'error');
+                return;
+            }
+            
+            // Generate random multiplier (0.5x to 100x)
+            const multiplier = Math.random() * 99.5 + 0.5;
+            
+            // Animate the ball
+            const ball = document.getElementById('limboBall');
+            const barHeight = document.querySelector('.limbo-bar').offsetHeight;
+            const ballPosition = barHeight * (1 - (multiplier / 100));
+            
+            gsap.to(ball, {
+                top: `${ballPosition}px`,
+                duration: 2,
+                ease: "bounce.out",
+                onComplete: () => {
+                    const win = multiplier >= target;
+                    const payout = win ? Math.floor(currentBet * (target / 1.01)) : -currentBet;
+                    
+                    // Update user points
+                    currentUser.points += payout;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    
+                    if (win) {
+                        gameLastWin.textContent = Math.floor(currentBet * (target / 1.01));
+                        playSound(winSound);
+                        showGameNotification(`Félicitations! Multiplicateur ${multiplier.toFixed(2)}x (cible: ${target}x). Vous gagnez ${Math.floor(currentBet * (target / 1.01))} points!`, 'success');
+                    } else {
+                        gameLastWin.textContent = -currentBet;
+                        playSound(loseSound);
+                        showGameNotification(`Dommage! Multiplicateur ${multiplier.toFixed(2)}x (cible: ${target}x). Vous perdez ${currentBet} points.`, 'error');
+                    }
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: payout,
+                        status: win ? 'Gagné' : 'Perdu'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    // Reset for next bet
+                    resetGameControls();
+                }
+            });
+        }
+        
+        function spinCrazyWheel() {
+            const wheel = document.querySelector('.crazy-wheel');
+            const spinDuration = 3000; // 3 seconds
+            
+            // Disable button during spin
+            document.getElementById('spinCrazyWheel').disabled = true;
+            
+            // Spin animation
+            gsap.to(wheel, {
+                rotation: 360 * 5 + Math.random() * 360,
+                duration: spinDuration / 1000,
+                ease: "back.out(2)",
+                onComplete: () => {
+                    // Determine prize (simplified)
+                    const segments = [
+                        { multiplier: 1, color: 'var(--primary)' },
+                        { multiplier: 2, color: 'var(--secondary)' },
+                        { multiplier: 5, color: 'var(--accent)' },
+                        { multiplier: 10, color: 'var(--success)' },
+                        { multiplier: 20, color: 'var(--warning)' }
+                    ];
+                    
+                    const normalizedRotation = wheel._gsap.rotation % 360;
+                    const segmentSize = 360 / segments.length;
+                    const winningSegment = segments[Math.floor(normalizedRotation / segmentSize)];
+                    
+                    const winnings = Math.floor(currentBet * winningSegment.multiplier);
+                    
+                    // Update user points
+                    currentUser.points += winnings;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    gameLastWin.textContent = winnings;
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: winnings,
+                        status: 'Gagné'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    // Show result
+                    showGameNotification(`Félicitations! Vous avez gagné ${winnings} points (${winningSegment.multiplier}x)!`, 'success');
+                    playSound(winSound);
+                    
+                    // Re-enable button
+                    document.getElementById('spinCrazyWheel').disabled = false;
+                    
+                    // Reset for next bet
+                    resetGameControls();
+                }
+            });
+        }
+        
+        function startSweetBonanzaGame() {
+            // Animate symbols
+            const cells = document.querySelectorAll('.bonanza-cell');
+            cells.forEach(cell => {
+                gsap.to(cell, {
+                    scale: 1.2,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 1
+                });
+            });
+            
+            // Check for wins (simplified)
+            setTimeout(() => {
+                // Random win chance (40%)
+                if (Math.random() < 0.4) {
+                    const multiplier = Math.floor(Math.random() * 10) + 1;
+                    const winnings = Math.floor(currentBet * multiplier);
+                    
+                    // Update user points
+                    currentUser.points += winnings;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    gameLastWin.textContent = winnings;
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: winnings,
+                        status: 'Gagné'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    // Highlight winning symbols
+                    const symbols = ['🍒', '🍋', '🍊', '🍇', '🍉', '🍓', '7️⃣'];
+                    const winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    
+                    cells.forEach(cell => {
+                        if (cell.textContent === winningSymbol) {
+                            gsap.to(cell, {
+                                scale: 1.5,
+                                backgroundColor: 'var(--success)',
+                                duration: 0.5,
+                                yoyo: true,
+                                repeat: 1
+                            });
+                        }
+                    });
+                    
+                    showGameNotification(`Félicitations! Vous avez gagné ${winnings} points (${multiplier}x)!`, 'success');
+                    playSound(winSound);
+                } else {
+                    gameLastWin.textContent = -currentBet;
+                    playSound(loseSound);
+                    showGameNotification(`Dommage! Vous perdez ${currentBet} points.`, 'error');
+                }
+                
+                // Reset for next bet
+                resetGameControls();
+            }, 2000);
+        }
+        
+        function spinSlots() {
+            const reels = [
+                document.getElementById('reel1'),
+                document.getElementById('reel2'),
+                document.getElementById('reel3')
+            ];
+            
+            const symbols = ['7', '🍒', '🍋', '🍊', '🍇', '💰'];
+            
+            // Disable button during spin
+            document.getElementById('spinSlots').disabled = true;
+            
+            // Spin each reel
+            reels.forEach((reel, index) => {
+                // Clear previous symbols
+                reel.innerHTML = '';
+                
+                // Add animation symbols
+                for (let i = 0; i < 5; i++) {
+                    const symbol = document.createElement('div');
+                    symbol.className = 'slot-symbol';
+                    symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    reel.appendChild(symbol);
+                }
+                
+                // Animate spinning
+                gsap.to(reel, {
+                    y: -480,
+                    duration: 1 + index * 0.3,
+                    ease: "back.out(1)",
+                    onComplete: () => {
+                        if (index === reels.length - 1) {
+                            // All reels stopped, check result
+                            const results = reels.map(reel => reel.lastChild.textContent);
+                            
+                            // Check for wins (simplified)
+                            if (results[0] === results[1] && results[1] === results[2]) {
+                                // All symbols match
+                                let multiplier = 1;
+                                if (results[0] === '7') multiplier = 10;
+                                else if (results[0] === '💰') multiplier = 5;
+                                else multiplier = 3;
+                                
+                                const winnings = Math.floor(currentBet * multiplier);
+                                
+                                // Update user points
+                                currentUser.points += winnings;
+                                updateUserData();
+                                gameBalanceDisplay.textContent = currentUser.points;
+                                pointsDisplay.textContent = currentUser.points;
+                                gameLastWin.textContent = winnings;
+                                
+                                // Add to history
+                                const now = new Date();
+                                const gameHistory = {
+                                    date: now.toLocaleString(),
+                                    game: currentGame.title,
+                                    points: winnings,
+                                    status: 'Gagné'
+                                };
+                                
+                                currentUser.history.unshift(gameHistory);
+                                updateUserData();
+                                renderHistory();
+                                
+                                // Highlight winning symbols
+                                reels.forEach(reel => {
+                                    gsap.to(reel.lastChild, {
+                                        scale: 1.5,
+                                        backgroundColor: 'var(--success)',
+                                        duration: 0.5,
+                                        yoyo: true,
+                                        repeat: 1
+                                    });
+                                });
+                                
+                                showGameNotification(`Félicitations! ${results[0]} ${results[0]} ${results[0]} - Vous gagnez ${winnings} points (${multiplier}x)!`, 'success');
+                                playSound(winSound);
+                            } else {
+                                gameLastWin.textContent = -currentBet;
+                                playSound(loseSound);
+                                showGameNotification(`Dommage! ${results[0]} ${results[1]} ${results[2]} - Vous perdez ${currentBet} points.`, 'error');
+                            }
+                            
+                            // Re-enable button
+                            document.getElementById('spinSlots').disabled = false;
+                            
+                            // Reset for next bet
+                            resetGameControls();
+                        }
+                    }
+                });
+            });
+        }
+        
+        function playRoulette(betType) {
+            const wheel = document.querySelector('.roulette-wheel');
+            const ball = document.querySelector('.roulette-ball');
+            
+            // Disable buttons during spin
+            document.getElementById('betRed').disabled = true;
+            document.getElementById('betBlack').disabled = true;
+            document.getElementById('betGreen').disabled = true;
+            
+            // Spin animation
+            gsap.to(wheel, {
+                rotation: 360 * 5 + Math.random() * 360,
+                duration: 3,
+                ease: "back.out(2)"
+            });
+            
+            // Ball animation
+            gsap.to(ball, {
+                y: 80,
+                duration: 1.5,
+                yoyo: true,
+                repeat: 1,
+                ease: "sine.inOut",
+                onComplete: () => {
+                    // Determine result (simplified)
+                    const result = Math.floor(Math.random() * 37); // 0-36
+                    let win = false;
+                    let multiplier = 1;
+                    
+                    if (betType === 'red' && (result % 2 === 1 && result !== 0)) {
+                        win = true;
+                        multiplier = 2;
+                    } else if (betType === 'black' && (result % 2 === 0 && result !== 0)) {
+                        win = true;
+                        multiplier = 2;
+                    } else if (betType === 'green' && result === 0) {
+                        win = true;
+                        multiplier = 36;
+                    }
+                    
+                    const winnings = win ? Math.floor(currentBet * multiplier) : -currentBet;
+                    
+                    // Update user points
+                    currentUser.points += winnings;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    
+                    if (win) {
+                        gameLastWin.textContent = Math.floor(currentBet * multiplier);
+                        playSound(winSound);
+                        showGameNotification(`Félicitations! Le résultat est ${result} (${betType}). Vous gagnez ${Math.floor(currentBet * multiplier)} points!`, 'success');
+                    } else {
+                        gameLastWin.textContent = -currentBet;
+                        playSound(loseSound);
+                        showGameNotification(`Dommage! Le résultat est ${result}. Vous perdez ${currentBet} points.`, 'error');
+                    }
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: winnings,
+                        status: win ? 'Gagné' : 'Perdu'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    // Re-enable buttons
+                    document.getElementById('betRed').disabled = false;
+                    document.getElementById('betBlack').disabled = false;
+                    document.getElementById('betGreen').disabled = false;
+                    
+                    // Reset for next bet
+                    resetGameControls();
+                }
+            });
+        }
+        
+        function endAviatorGame(cashedOut = false) {
+            clearInterval(gameInterval);
+            
+            const airplane = document.getElementById('airplane');
+            const multiplierDisplay = document.getElementById('multiplierDisplay');
+            const winnings = Math.floor(currentBet * currentMultiplier);
+            
+            if (cashedOut) {
+                currentUser.points += winnings;
                 
                 // Ajouter à l'historique
                 const now = new Date();
-                const taskHistory = {
+                const gameHistory = {
                     date: now.toLocaleString(),
-                    task: task.title,
-                    points: task.points,
-                    status: 'Complété'
+                    game: currentGame.title,
+                    points: winnings,
+                    status: 'Gagné'
                 };
                 
-                currentUser.history.unshift(taskHistory);
-                
-                // Mettre à jour le stockage local
+                currentUser.history.unshift(gameHistory);
                 updateUserData();
-                
-                // Mettre à jour l'affichage
-                pointsDisplay.textContent = currentUser.points;
                 renderHistory();
                 
-                showNotification(`+${task.points} points pour "${task.title}"!`, 'success');
+                multiplierDisplay.innerHTML = `<span style="color: var(--success);">${currentMultiplier.toFixed(2)}x - ${winnings} points gagnés!</span>`;
+                showGameNotification(`Félicitations! Vous avez gagné ${winnings} points!`, 'success');
+                playSound(winSound);
+                
+                // Animate airplane flying away
+                gsap.to(airplane, {
+                    top: '-100px',
+                    rotation: -20,
+                    duration: 1,
+                    onComplete: () => {
+                        resetGameControls();
+                    }
+                });
+            } else {
+                multiplierDisplay.innerHTML = `<span style="color: var(--danger);">${currentMultiplier.toFixed(2)}x - Explosion!</span>`;
+                showGameNotification(`Dommage! Vous avez perdu ${currentBet} points.`, 'error');
+                playSound(explosionSound);
+                
+                // Animate crash
+                gsap.to(airplane, {
+                    rotation: 360,
+                    scale: 1.5,
+                    duration: 0.5,
+                    onComplete: () => {
+                        gsap.to(airplane, {
+                            rotation: 0,
+                            scale: 1,
+                            duration: 0.3
+                        });
+                        resetGameControls();
+                    }
+                });
             }
+            
+            pointsDisplay.textContent = currentUser.points;
+            gameBalanceDisplay.textContent = currentUser.points;
+            gameLastWin.textContent = cashedOut ? winnings : -currentBet;
+        }
+        
+        function endJetXGame(cashedOut = false) {
+            clearInterval(gameInterval);
+            
+            const jet = document.getElementById('jet');
+            const multiplierDisplay = document.getElementById('multiplierDisplay');
+            const winnings = Math.floor(currentBet * currentMultiplier);
+            
+            if (cashedOut) {
+                currentUser.points += winnings;
+                
+                // Ajouter à l'historique
+                const now = new Date();
+                const gameHistory = {
+                    date: now.toLocaleString(),
+                    game: currentGame.title,
+                    points: winnings,
+                    status: 'Gagné'
+                };
+                
+                currentUser.history.unshift(gameHistory);
+                updateUserData();
+                renderHistory();
+                
+                multiplierDisplay.innerHTML = `<span style="color: var(--success);">${currentMultiplier.toFixed(2)}x - ${winnings} points gagnés!</span>`;
+                showGameNotification(`Félicitations! Vous avez gagné ${winnings} points!`, 'success');
+                playSound(winSound);
+                
+                // Animate jet flying away
+                gsap.to(jet, {
+                    left: '100%',
+                    rotation: 20,
+                    duration: 1,
+                    onComplete: () => {
+                        resetGameControls();
+                    }
+                });
+            } else {
+                multiplierDisplay.innerHTML = `<span style="color: var(--danger);">${currentMultiplier.toFixed(2)}x - Explosion!</span>`;
+                showGameNotification(`Dommage! Vous avez perdu ${currentBet} points.`, 'error');
+                playSound(explosionSound);
+                
+                // Animate explosion
+                gsap.to(jet, {
+                    scale: 1.5,
+                    rotation: 360,
+                    duration: 0.5,
+                    onComplete: () => {
+                        gsap.to(jet, {
+                            scale: 1,
+                            rotation: 0,
+                            duration: 0.3
+                        });
+                        resetGameControls();
+                    }
+                });
+            }
+            
+            pointsDisplay.textContent = currentUser.points;
+            gameBalanceDisplay.textContent = currentUser.points;
+            gameLastWin.textContent = cashedOut ? winnings : -currentBet;
+        }
+        
+        function cashoutGame() {
+            if (!gameStarted) return;
+            
+            // Play cashout sound
+            playSound(coinSound);
+            
+            switch(currentGame.title.toLowerCase()) {
+                case 'aviator':
+                    endAviatorGame(true);
+                    break;
+                case 'jetx':
+                    endJetXGame(true);
+                    break;
+                case 'plinko':
+                    // Plinko doesn't have cashout
+                    break;
+                case 'mines':
+                    // Mines cashout (if diamonds found)
+                    if (diamondsFound > 0) {
+                        const winnings = currentBet * 2 * diamondsFound;
+                        currentUser.points += winnings;
+                        updateUserData();
+                        gameBalanceDisplay.textContent = currentUser.points;
+                        pointsDisplay.textContent = currentUser.points;
+                        gameLastWin.textContent = winnings;
+                        
+                        // Add to history
+                        const now = new Date();
+                        const gameHistory = {
+                            date: now.toLocaleString(),
+                            game: currentGame.title,
+                            points: winnings,
+                            status: 'Gagné'
+                        };
+                        
+                        currentUser.history.unshift(gameHistory);
+                        updateUserData();
+                        renderHistory();
+                        
+                        showGameNotification(`Vous avez récupéré ${winnings} points pour ${diamondsFound} diamants trouvés!`, 'success');
+                        playSound(winSound);
+                    }
+                    resetGameControls();
+                    break;
+            }
+        }
+        
+        function resetGame() {
+            clearInterval(gameInterval);
+            gameStarted = false;
+            currentGame = null;
+            currentBet = 0;
+            currentMultiplier = 1.0;
+            gameBetBtn.disabled = false;
+            gameCashoutBtn.style.display = 'none';
+            minesGameState = [];
+            selectedMinesCount = 0;
+            diamondsFound = 0;
+        }
+        
+        function resetGameControls() {
+            gameBetBtn.disabled = false;
+            gameCashoutBtn.style.display = 'none';
+            gameStarted = false;
+        }
+        
+        function setBetAmount(amount) {
+            gameBetAmount.value = amount;
+            playSound(clickSound);
+        }
+        
+        function toggleSound() {
+            config.soundEnabled = !config.soundEnabled;
+            soundToggle.innerHTML = config.soundEnabled ? 
+                '<i class="fas fa-volume-up"></i>' : 
+                '<i class="fas fa-volume-mute"></i>';
+            
+            // Provide feedback
+            if (config.soundEnabled) {
+                playSound(clickSound);
+            }
+        }
+        
+        function playSound(sound) {
+            if (config.soundEnabled) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("Audio play failed:", e));
+            }
+        }
+        
+        function showGameNotification(message, type) {
+            gameNotification.textContent = message;
+            gameNotification.className = `game-notification ${type}`;
+            gameNotification.style.display = 'block';
+            
+            // Animate notification
+            gsap.from(gameNotification, {
+                y: -50,
+                opacity: 0,
+                duration: 0.3
+            });
+            
+            setTimeout(() => {
+                gsap.to(gameNotification, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        gameNotification.style.display = 'none';
+                    }
+                });
+            }, 3000);
         }
         
         function renderHistory() {
@@ -1269,11 +3362,34 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.date}</td>
-                    <td>${item.task}</td>
+                    <td>${item.game || item.task || ''}</td>
                     <td>${item.points > 0 ? '+' : ''}${item.points}</td>
-                    <td class="status-${item.status.toLowerCase()}">${item.status}</td>
+                    <td class="status-${item.status.toLowerCase().replace(' ', '-')}">${item.status}</td>
                 `;
                 historyTable.appendChild(row);
+            });
+        }
+        
+        function renderReferralsTable() {
+            referralsTable.innerHTML = '';
+            
+            const userReferrals = referrals.filter(r => r.referrerId === currentUser.id);
+            
+            if (userReferrals.length === 0) {
+                referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td></tr>';
+                return;
+            }
+            
+            userReferrals.forEach(ref => {
+                const referee = users.find(u => u.id === ref.refereeId);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ref.refereeUsername}</td>
+                    <td>${new Date(ref.date).toLocaleDateString()}</td>
+                    <td>${ref.bonusGiven ? 'Bonus attribué' : 'En attente de dépôt'}</td>
+                    <td>${ref.bonusGiven ? config.referralBonus : '0'}</td>
+                `;
+                referralsTable.appendChild(row);
             });
         }
         
@@ -1290,7 +3406,9 @@
             wheel.innerHTML = '';
             wheel.style.transform = 'rotate(0deg)';
             
-            const prizes = [50, 20, 30, 'Rien', 10, 25, 15, 100];
+            // Les gains sont multipliés par le multiplicateur de l'utilisateur
+            const basePrizes = [50, 20, 30, -10, 10, 25, 15, 100];
+            const prizes = basePrizes.map(p => Math.round(p * currentUser.wheelMultiplier));
             const colors = ['#f1c40f', '#e67e22', '#e74c3c', '#9b59b6', '#3498db', '#2ecc71', '#1abc9c', '#95a5a6'];
             
             const segmentAngle = 360 / prizes.length;
@@ -1311,7 +3429,7 @@
                 segment.style.top = '0';
                 
                 const prizeText = document.createElement('div');
-                prizeText.textContent = prize;
+                prizeText.textContent = prize > 0 ? `+${prize}` : prize;
                 prizeText.style.position = 'absolute';
                 prizeText.style.transform = `rotate(${segmentAngle * index + segmentAngle/2}deg)`;
                 prizeText.style.transformOrigin = '0 0';
@@ -1376,7 +3494,8 @@
                     requestAnimationFrame(animate);
                 } else {
                     // Déterminer le prix gagné
-                    const prizes = [50, 20, 30, 0, 10, 25, 15, 100]; // "Rien" = 0
+                    const basePrizes = [50, 20, 30, -10, 10, 25, 15, 100];
+                    const prizes = basePrizes.map(p => Math.round(p * currentUser.wheelMultiplier));
                     const normalizedRotation = rotation % 360;
                     const segmentAngle = 360 / prizes.length;
                     const winningIndex = Math.floor(((360 - normalizedRotation) % 360) / segmentAngle);
@@ -1386,27 +3505,28 @@
                     currentUser.wheelAttemptsLeft -= 1;
                     currentUser.lastWheelSpin = new Date().toISOString();
                     
-                    // Donner le prix
+                    // Appliquer le prix
+                    currentUser.points += prize;
+                    updateUserData();
+                    pointsDisplay.textContent = currentUser.points;
+                    
+                    // Ajouter à l'historique
+                    const now = new Date();
+                    const taskHistory = {
+                        date: now.toLocaleString(),
+                        task: "Roue de la chance",
+                        points: prize,
+                        status: prize > 0 ? 'Gagné' : 'Perdu'
+                    };
+                    
+                    currentUser.history.unshift(taskHistory);
+                    renderHistory();
+                    
                     if (prize > 0) {
-                        currentUser.points += prize;
-                        updateUserData();
-                        pointsDisplay.textContent = currentUser.points;
-                        
-                        // Ajouter à l'historique
-                        const now = new Date();
-                        const taskHistory = {
-                            date: now.toLocaleString(),
-                            task: "Roue de la chance",
-                            points: prize,
-                            status: 'Gagné'
-                        };
-                        
-                        currentUser.history.unshift(taskHistory);
-                        renderHistory();
-                        
                         showNotification(`Félicitations! Vous avez gagné ${prize} points!`, 'success');
+                        createConfetti();
                     } else {
-                        showNotification('Dommage, vous n\'avez rien gagné cette fois. Réessayez demain!', 'warning');
+                        showNotification(`Dommage! Vous avez perdu ${Math.abs(prize)} points.`, 'error');
                     }
                     
                     // Mettre à jour l'affichage des tentatives
@@ -1425,7 +3545,7 @@
             const minWithdraw = config.minWithdraw;
             
             if (currentUser.points < minWithdraw) {
-                showNotification(`Minimum de retrait: ${minWithdraw} points (${minWithdraw/config.pointsToMoneyRatio}€)`, 'warning');
+                showNotification(`Minimum de retrait: ${minWithdraw} points (${minWithdraw/config.pointsToMoneyRatio * 1000} FCFA)`, 'warning');
                 return;
             }
             
@@ -1434,12 +3554,155 @@
             withdrawAmount.value = minWithdraw;
             withdrawPhone.value = currentUser.phone;
             
+            // Sélectionner la première méthode par défaut
+            methodBtns.forEach((btn, index) => {
+                if (btn.closest('#withdrawForm')) {
+                    if (index === 0) {
+                        btn.click();
+                    }
+                }
+            });
+            
             withdrawModal.style.display = 'flex';
         }
         
-        function closeWithdrawModal() {
-            withdrawModal.style.display = 'none';
-            withdrawForm.reset();
+        function openReferralModal() {
+            referralModal.style.display = 'flex';
+        }
+        
+        function copyReferralCode() {
+            const code = userReferralCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('Code de parrainage copié!', 'success');
+            }).catch(err => {
+                showNotification('Échec de la copie', 'error');
+            });
+        }
+        
+        function handleDeposit(e) {
+            e.preventDefault();
+            const amount = parseInt(depositAmount.value);
+            const method = depositMethod.value;
+            const phone = depositPhone.value;
+            
+            if (amount < config.minDeposit) {
+                showNotification(`Le montant minimum est de ${config.minDeposit} FCFA`, 'error');
+                return;
+            }
+            
+            if (!phone.match(/^[0-9]{9}$/)) {
+                showNotification('Numéro de téléphone invalide', 'error');
+                return;
+            }
+            
+            if (!method) {
+                showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+                return;
+            }
+            
+            // Simuler l'appel API à Moov ou Airtel
+            submitDeposit.disabled = true;
+            submitDeposit.innerHTML = '<div class="loading"></div> Envoi en cours...';
+            
+            // Ceci est une simulation - en production, vous utiliseriez l'API Moov/Airtel
+            setTimeout(() => {
+                // Calculer les points à créditer (1000 FCFA = 10 points)
+                const pointsToAdd = Math.floor(amount * config.pointsToMoneyRatio);
+                
+                // Créer le dépôt
+                const deposit = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    amount,
+                    phone,
+                    method,
+                    points: pointsToAdd,
+                    status: 'completed',
+                    date: new Date().toISOString()
+                };
+                
+                deposits.push(deposit);
+                localStorage.setItem('africlick_deposits', JSON.stringify(deposits));
+                
+                // Ajouter les points à l'utilisateur
+                currentUser.points += pointsToAdd;
+                currentUser.totalDeposited = (currentUser.totalDeposited || 0) + amount;
+                
+                // Augmenter le multiplicateur de la roue en fonction des dépôts
+                // 5000 FCFA dépensés = multiplicateur x1.5, 10000 FCFA = x2, etc.
+                currentUser.wheelMultiplier = 1 + Math.floor(currentUser.totalDeposited / 5000) * 0.5;
+                
+                // Ajouter à l'historique
+                const now = new Date();
+                const depositHistory = {
+                    date: now.toLocaleString(),
+                    task: `Dépôt ${method} (${phone})`,
+                    points: pointsToAdd,
+                    status: 'Complété'
+                };
+                
+                currentUser.history.unshift(depositHistory);
+                
+                // Vérifier les parrainages en attente
+                checkPendingReferrals();
+                
+                // Mettre à jour le stockage local
+                updateUserData();
+                
+                // Mettre à jour l'affichage
+                pointsDisplay.textContent = currentUser.points;
+                wheelMultiplierDisplay.textContent = currentUser.wheelMultiplier;
+                renderHistory();
+                
+                // Fermer la modal
+                depositModal.style.display = 'none';
+                submitDeposit.disabled = false;
+                submitDeposit.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer la demande';
+                
+                showNotification(`Dépôt de ${amount} FCFA réussi! ${pointsToAdd} points ajoutés.`, 'success');
+                createCoinAnimation(pointsToAdd);
+            }, 2000);
+        }
+        
+        function checkPendingReferrals() {
+            const pendingReferrals = referrals.filter(
+                r => r.refereeId === currentUser.id && !r.bonusGiven
+            );
+            
+            pendingReferrals.forEach(ref => {
+                const referrer = users.find(u => u.id === ref.referrerId);
+                if (referrer) {
+                    // Donner le bonus au parrain
+                    referrer.points += config.referralBonus;
+                    
+                    // Ajouter à l'historique du parrain
+                    const now = new Date();
+                    const referralHistory = {
+                        date: now.toLocaleString(),
+                        task: `Bonus parrainage (${currentUser.username})`,
+                        points: config.referralBonus,
+                        status: 'Gagné'
+                    };
+                    
+                    referrer.history.unshift(referralHistory);
+                    
+                    // Marquer le parrainage comme complété
+                    ref.bonusGiven = true;
+                    
+                    // Mettre à jour l'utilisateur parrain
+                    const userIndex = users.findIndex(u => u.id === referrer.id);
+                    if (userIndex !== -1) {
+                        users[userIndex] = referrer;
+                    }
+                    
+                    showNotification(`Bonus de parrainage attribué à ${referrer.username}!`, 'info');
+                }
+            });
+            
+            if (pendingReferrals.length > 0) {
+                localStorage.setItem('africlick_users', JSON.stringify(users));
+                localStorage.setItem('africlick_referrals', JSON.stringify(referrals));
+            }
         }
         
         function handleWithdraw(e) {
@@ -1463,13 +3726,32 @@
                 return;
             }
             
-            // Simuler l'appel API à Airtel Money
+            if (!method) {
+                showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+                return;
+            }
+            
+            // Simuler l'appel API à Moov ou Airtel
             submitWithdraw.disabled = true;
             submitWithdraw.innerHTML = '<div class="loading"></div> Envoi en cours...';
             
-            // Ceci est une simulation - en production, vous utiliseriez l'API Airtel
+            // Ceci est une simulation - en production, vous utiliseriez l'API Moov/Airtel
             setTimeout(() => {
-                const moneyAmount = (amount / config.pointsToMoneyRatio).toFixed(2);
+                const moneyAmount = (amount / config.pointsToMoneyRatio) * 1000; // Convertir en FCFA
+                
+                // Créer la demande de retrait
+                const withdrawal = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    amount,
+                    phone,
+                    method,
+                    status: 'pending',
+                    date: new Date().toISOString()
+                };
+                
+                withdrawals.push(withdrawal);
+                localStorage.setItem('africlick_withdrawals', JSON.stringify(withdrawals));
                 
                 // Déduire les points
                 currentUser.points -= amount;
@@ -1493,11 +3775,11 @@
                 renderHistory();
                 
                 // Fermer la modal
-                closeWithdrawModal();
+                withdrawModal.style.display = 'none';
                 submitWithdraw.disabled = false;
                 submitWithdraw.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer la demande';
                 
-                showNotification(`Demande de retrait de ${moneyAmount}€ envoyée. Traitement sous 24h.`, 'success');
+                showNotification(`Demande de retrait de ${moneyAmount} FCFA envoyée. Traitement sous 24h.`, 'success');
             }, 2000);
         }
         
@@ -1509,33 +3791,6 @@
             // Activer l'onglet sélectionné
             document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
             document.getElementById(`${tabId}Tab`).classList.add('active');
-        }
-        
-        function loadOfferWalls() {
-            // En production, vous utiliseriez vos vrais IDs de réseaux CPA
-            offerIframe.srcdoc = `
-                <html>
-                    <body style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f5f5; font-family: Arial;">
-                        <div style="text-align: center; padding: 20px;">
-                            <h2>Offres rémunérées</h2>
-                            <p>En production, cette zone afficherait les offres de vos réseaux CPA (CPAGrip, OGAds, etc.)</p>
-                            <p><small>Configurez vos IDs dans le fichier server.js</small></p>
-                        </div>
-                    </body>
-                </html>
-            `;
-            
-            surveyIframe.srcdoc = `
-                <html>
-                    <body style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f5f5; font-family: Arial;">
-                        <div style="text-align: center; padding: 20px;">
-                            <h2>Sondages payants</h2>
-                            <p>En production, cette zone afficherait les sondages rémunérés</p>
-                            <p><small>Intégrez votre solution de sondages préférée</small></p>
-                        </div>
-                    </body>
-                </html>
-            `;
         }
         
         function updateUserData() {
@@ -1553,11 +3808,51 @@
             notification.classList.add(type);
             notificationText.textContent = message;
             
+            // Changer l'icône selon le type
+            const icon = notification.querySelector('i');
+            if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'warning') {
+                icon.className = 'fas fa-exclamation-triangle';
+            } else if (type === 'info') {
+                icon.className = 'fas fa-info-circle';
+            } else {
+                icon.className = 'fas fa-check-circle';
+            }
+            
             notification.classList.add('show');
             
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        function createCoinAnimation(amount) {
+            const coin = document.createElement('div');
+            coin.className = 'coin-animation';
+            coin.textContent = `+${amount}`;
+            coin.style.left = `${Math.random() * 100}vw`;
+            coin.style.animationDuration = `${Math.random() * 0.5 + 0.5}s`;
+            document.body.appendChild(coin);
+            
+            setTimeout(() => {
+                coin.remove();
+            }, 1000);
         }
     </script>
 </body>
