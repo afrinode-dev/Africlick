@@ -2,7 +2,8 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bodyParser = require('body-parser');
-const axios = require('axios');
+const multer = require('multer');
+const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -13,6 +14,7 @@ const config = {
     pointsToMoneyRatio: 0.01, // 1000 FCFA = 10 points (1 point = 100 FCFA)
     wheelAttemptsPerDay: 1,
     referralBonus: 20,   // Points bonus pour parrainage
+    profilePicturesDir: './uploads/profile_pictures',
     moovMoney: {
         apiKey: 'YOUR_MOOV_API_KEY',
         apiUrl: 'https://api.moov-africa.com',
@@ -24,6 +26,37 @@ const config = {
         merchantId: 'YOUR_MERCHANT_ID'
     }
 };
+
+// Créer le répertoire pour les photos de profil si inexistant
+if (!fs.existsSync(config.profilePicturesDir)) {
+    fs.mkdirSync(config.profilePicturesDir, { recursive: true });
+}
+
+// Configuration de multer pour le stockage des photos de profil
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, config.profilePicturesDir);
+    },
+    filename: (req, file, cb) => {
+        const userId = req.params.userId;
+        const ext = path.extname(file.originalname);
+        cb(null, `profile_${userId}${ext}`);
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Seules les images sont autorisées!'), false);
+        }
+    },
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB
+    }
+});
 
 // Initialisation de la base de données
 const db = new sqlite3.Database('database.sqlite', (err) => {
@@ -46,6 +79,7 @@ db.serialize(() => {
         wheel_multiplier REAL DEFAULT 1.0,
         last_wheel_spin DATETIME,
         wheel_attempts_left INTEGER DEFAULT ${config.wheelAttemptsPerDay},
+        profile_picture TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
     
@@ -153,6 +187,18 @@ app.post('/api/register', (req, res) => {
         return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
     
+    if (username.length < 3) {
+        return res.status(400).json({ error: 'Le pseudo doit contenir au moins 3 caractères' });
+    }
+    
+    if (!phone.match(/^[0-9]{9}$/)) {
+        return res.status(400).json({ error: 'Numéro de téléphone invalide (9 chiffres requis)' });
+    }
+    
+    if (password.length < 6) {
+        return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 6 caractères' });
+    }
+    
     // Vérifier si l'utilisateur existe déjà
     db.get('SELECT id FROM users WHERE phone = ?', [phone], (err, row) => {
         if (err) {
@@ -228,7 +274,7 @@ app.post('/api/login', (req, res) => {
         return res.status(400).json({ error: 'Numéro et mot de passe requis' });
     }
     
-    db.get('SELECT id, username, phone, points, referral_code, total_deposited, wheel_multiplier FROM users WHERE phone = ? AND password = ?', 
+    db.get('SELECT id, username, phone, points, referral_code, total_deposited, wheel_multiplier, profile_picture FROM users WHERE phone = ? AND password = ?', 
         [phone, password], 
         (err, user) => {
             if (err) {
@@ -241,6 +287,72 @@ app.post('/api/login', (req, res) => {
             
             res.json(user);
         });
+});
+
+// Gestion du profil utilisateur
+app.post('/api/change-password/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({ error: 'Tous les champs sont requis' });
+    }
+    
+    if (newPassword.length < 6) {
+        return res.status(400).json({ error: 'Le nouveau mot de passe doit contenir au moins 6 caractères' });
+    }
+    
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ error: 'Les nouveaux mots de passe ne correspondent pas' });
+    }
+    
+    // Vérifier le mot de passe actuel
+    db.get('SELECT password FROM users WHERE id = ?', [userId], (err, user) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        
+        if (!user) {
+            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+        }
+        
+        if (user.password !== currentPassword) {
+            return res.status(401).json({ error: 'Mot de passe actuel incorrect' });
+        }
+        
+        // Mettre à jour le mot de passe
+        db.run('UPDATE users SET password = ? WHERE id = ?', [newPassword, userId], (err) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            
+            res.json({ success: true, message: 'Mot de passe changé avec succès' });
+        });
+    });
+});
+
+app.post('/api/upload-profile-picture/:userId', upload.single('profile_picture'), (req, res) => {
+    const userId = req.params.userId;
+    
+    if (!req.file) {
+        return res.status(400).json({ error: 'Aucun fichier téléchargé' });
+    }
+    
+    const profilePicturePath = `/profile_pictures/${req.file.filename}`;
+    
+    db.run('UPDATE users SET profile_picture = ? WHERE id = ?', [profilePicturePath, userId], (err) => {
+        if (err) {
+            // Supprimer le fichier uploadé en cas d'erreur
+            fs.unlinkSync(req.file.path);
+            return res.status(500).json({ error: err.message });
+        }
+        
+        res.json({ 
+            success: true, 
+            message: 'Photo de profil mise à jour',
+            profilePicture: profilePicturePath
+        });
+    });
 });
 
 // Jeux
@@ -481,7 +593,7 @@ app.post('/api/deposit', async (req, res) => {
                                 }
                                 
                                 // Vérifier les parrainages en attente
-                                checkPendingReferrals(userId);
+                                checkPendingReferrals(userId, res);
                                 
                                 // Récupérer les nouvelles infos utilisateur
                                 db.get('SELECT points, wheel_multiplier FROM users WHERE id = ?', [userId], (err, user) => {
@@ -505,7 +617,7 @@ app.post('/api/deposit', async (req, res) => {
     }
 });
 
-function checkPendingReferrals(userId) {
+function checkPendingReferrals(userId, res) {
     // Vérifier si cet utilisateur a été parrainé
     db.get('SELECT referrer_id FROM referrals WHERE referee_id = ? AND bonus_given = 0', [userId], (err, referral) => {
         if (err || !referral) return;

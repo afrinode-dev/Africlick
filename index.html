@@ -10,48 +10,66 @@
         :root {
             --primary: #FF7F00;
             --secondary: #009688;
-            --dark: #2C3E50;
-            --light: #F5F5F5;
+            --dark: #1E293B;
+            --darker: #0F172A;
+            --light: #F8FAFC;
+            --lighter: #FFFFFF;
             --accent: #E91E63;
-            --danger: #F44336;
-            --success: #4CAF50;
-            --warning: #FFC107;
+            --danger: #EF4444;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --info: #3B82F6;
             --moov: #FF6B00;
             --airtel: #FF0000;
             --jet: #3F51B5;
             --diamond: #00BCD4;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --rounded-sm: 0.125rem;
+            --rounded: 0.25rem;
+            --rounded-md: 0.375rem;
+            --rounded-lg: 0.5rem;
+            --rounded-xl: 0.75rem;
+            --rounded-full: 9999px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
         
         body {
-            background-color: var(--dark);
+            background-color: var(--darker);
             color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 1.5rem;
         }
         
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px 0;
+            padding: 1.5rem 0;
             text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         header::before {
@@ -63,6 +81,7 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
             animation: pulse 15s infinite linear;
+            z-index: -1;
         }
         
         @keyframes pulse {
@@ -72,67 +91,117 @@
         
         header h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
             position: relative;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-weight: 800;
         }
         
         header p {
             font-size: 1.1rem;
             opacity: 0.9;
             position: relative;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
-        .auth-forms {
+        /* Auth Forms */
+        .auth-container {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-switch {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-switch-btn {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            position: relative;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+        
+        .auth-switch-btn.active {
+            opacity: 1;
+        }
+        
+        .auth-switch-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
         }
         
         .form-container {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-lg);
             width: 100%;
             max-width: 400px;
-            transition: transform 0.3s ease;
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .form-container.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
         }
         
         .form-container:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-xl);
         }
         
         .form-container h2 {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             color: white;
             text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
             color: white;
+            font-size: 0.9rem;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 0.75rem 1rem;
             border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 5px;
+            border-radius: var(--rounded-md);
             font-size: 1rem;
-            transition: all 0.3s;
+            transition: var(--transition);
             background: rgba(0,0,0,0.2);
             color: white;
         }
@@ -148,64 +217,131 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--rounded-md);
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
         }
         
         button:hover {
             background-color: #E67100;
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-md);
         }
         
         button:disabled {
-            background-color: #ccc;
+            background-color: #64748B;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
             opacity: 0.7;
         }
         
+        /* Dashboard Styles */
         .dashboard {
             display: none;
             background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-bottom: 30px;
+            backdrop-filter: blur(12px);
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .user-info {
+        /* User Profile Section */
+        .user-profile {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-pic-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-info p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .profile-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--rounded-md);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Points Display */
         .points-display {
             background: linear-gradient(135deg, var(--secondary), var(--primary));
             color: white;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 1.5rem;
+            border-radius: var(--rounded-xl);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-lg);
+            animation: pulse 2s infinite alternate;
         }
         
         .points-display::after {
@@ -220,8 +356,8 @@
         }
         
         .points-display h2 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
             position: relative;
             z-index: 2;
         }
@@ -232,12 +368,21 @@
             position: relative;
             z-index: 2;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 0.5rem;
         }
         
+        .points-display small {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Actions */
         .actions {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 1rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
         }
         
@@ -251,7 +396,7 @@
         }
         
         .deposit-btn:hover {
-            background-color: #3d8b40;
+            background-color: #0D9F6E;
         }
         
         .withdraw-btn {
@@ -267,22 +412,23 @@
         }
         
         .referral-btn:hover {
-            background-color: #d45a00;
+            background-color: #D45A00;
         }
         
+        /* Games Grid */
         .games-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .game-card {
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            transition: all 0.3s ease;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
@@ -292,7 +438,7 @@
         
         .game-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-lg);
             border-color: var(--primary);
             background: rgba(255,255,255,0.1);
         }
@@ -302,21 +448,24 @@
         }
         
         @keyframes highlight {
-            0%, 100% { border-color: transparent; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+            0%, 100% { border-color: transparent; box-shadow: var(--shadow); }
             50% { border-color: var(--warning); box-shadow: 0 0 15px var(--warning); }
         }
         
         .game-card h3 {
-            margin-bottom: 10px;
+            margin-bottom: 0.75rem;
             color: white;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            font-size: 1.25rem;
         }
         
         .game-card p {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
             color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            min-height: 40px;
         }
         
         .game-card .reward {
@@ -324,7 +473,9 @@
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
         }
         
         .game-card button {
@@ -337,40 +488,43 @@
         
         .game-card .game-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 1rem;
+            right: 1rem;
             background-color: var(--accent);
             color: white;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--rounded-full);
+            font-size: 0.75rem;
             font-weight: bold;
         }
         
+        /* History Table */
         .history {
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
         }
         
         .history h2 {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
             color: white;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
         }
         
         th, td {
-            padding: 12px 15px;
+            padding: 0.75rem 1rem;
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             color: white;
@@ -379,6 +533,9 @@
         th {
             background-color: rgba(0,0,0,0.2);
             font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         
         tr:hover {
@@ -400,14 +557,15 @@
             font-weight: bold;
         }
         
+        /* Wheel Container */
         .wheel-container {
             display: none;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -415,23 +573,23 @@
         .wheel {
             width: 300px;
             height: 300px;
-            margin: 0 auto 20px;
+            margin: 0 auto 1.5rem;
             position: relative;
             border-radius: 50%;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-lg);
             border: 8px solid rgba(255,255,255,0.2);
             background: rgba(0,0,0,0.2);
         }
         
         .wheel-btn {
             background-color: var(--accent);
-            margin-top: 20px;
+            margin-top: 1.5rem;
         }
         
         .wheel-pointer {
             position: absolute;
-            top: -20px;
+            top: -1.5rem;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -440,6 +598,142 @@
             border-right: 20px solid transparent;
             border-top: 30px solid var(--danger);
             z-index: 10;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 2rem;
+            border-radius: var(--rounded-xl);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            transition: var(--transition);
+            background: none;
+            border: none;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+            background: rgba(255,255,255,0.1);
+            transform: rotate(90deg);
+        }
+        
+        .modal-form .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .modal-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .modal-form input, .modal-form select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--rounded-md);
+            font-size: 1rem;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .modal-form input:focus, .modal-form select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
+            background: rgba(0,0,0,0.4);
+        }
+        
+        .modal-form button {
+            margin-top: 1.5rem;
+        }
+        
+        /* Tab Container */
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab:hover:not(.active) {
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
         }
         
         /* Game Modal Styles */
@@ -461,19 +755,21 @@
             width: 90%;
             max-width: 800px;
             height: 80vh;
-            background: rgba(44, 62, 80, 0.95);
-            border-radius: 10px;
-            padding: 20px;
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: var(--rounded-xl);
+            padding: 1.5rem;
             position: relative;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
         
         .game-body {
@@ -484,14 +780,14 @@
         
         .game-controls {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 0.75rem;
+            margin-top: 1rem;
         }
         
         .game-controls input {
             flex: 1;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 0.75rem;
+            border-radius: var(--rounded-md);
             border: 1px solid rgba(255,255,255,0.2);
             background: rgba(0,0,0,0.3);
             color: white;
@@ -499,15 +795,15 @@
         
         .game-controls button {
             width: auto;
-            padding: 10px 15px;
+            padding: 0.75rem 1.25rem;
         }
         
         /* Game Canvas Styles */
         .game-canvas {
             flex: 1;
             background: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            margin-bottom: 15px;
+            border-radius: var(--rounded-md);
+            margin-bottom: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -619,12 +915,12 @@
         
         .mine-cell {
             background: rgba(255,255,255,0.1);
-            border-radius: 5px;
+            border-radius: var(--rounded-md);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             height: 60px;
             position: relative;
             overflow: hidden;
@@ -660,19 +956,19 @@
             width: 100px;
             height: 100px;
             background: white;
-            border-radius: 10px;
+            border-radius: var(--rounded-md);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 3rem;
             color: var(--dark);
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
         }
         
         .dice-buttons {
             display: flex;
-            gap: 10px;
+            gap: 0.75rem;
         }
         
         /* Limbo Game */
@@ -687,7 +983,7 @@
             width: 80%;
             height: 10px;
             background: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             position: relative;
         }
         
@@ -699,7 +995,7 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: var(--shadow);
         }
         
         /* Crazy Time Game */
@@ -724,13 +1020,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             position: relative;
+            box-shadow: var(--shadow);
         }
         
         .crazy-pointer {
             position: absolute;
-            top: -20px;
+            top: -1.5rem;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -750,14 +1047,14 @@
         
         .bonanza-cell {
             background: rgba(255,255,255,0.1);
-            border-radius: 5px;
+            border-radius: var(--rounded-md);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 80px;
             font-size: 2rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .bonanza-cell:hover {
@@ -776,18 +1073,18 @@
             width: 100%;
             height: 150px;
             background: rgba(0,0,0,0.3);
-            border-radius: 10px;
+            border-radius: var(--rounded-md);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
         
         .slot-reel {
             width: 80px;
             height: 120px;
             background: white;
-            border-radius: 5px;
+            border-radius: var(--rounded-sm);
             overflow: hidden;
             position: relative;
         }
@@ -855,8 +1152,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             position: relative;
+            box-shadow: var(--shadow);
         }
         
         .roulette-ball {
@@ -873,17 +1171,17 @@
         /* Game Stats */
         .game-stats {
             display: flex;
-            gap: 20px;
+            gap: 1.5rem;
             background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+            padding: 1rem;
+            border-radius: var(--rounded-md);
+            margin-top: 1rem;
         }
         
         .game-stats div {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
         }
         
         .game-stats span {
@@ -894,18 +1192,19 @@
         /* Quick Bet Buttons */
         .quick-bet-buttons {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
         
         .quick-bet-buttons button {
-            padding: 8px 15px;
+            padding: 0.5rem 1rem;
             border: 1px solid rgba(255,255,255,0.2);
             background: rgba(0,0,0,0.2);
             color: white;
-            border-radius: 5px;
+            border-radius: var(--rounded-md);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            flex: 1;
         }
         
         .quick-bet-buttons button:hover {
@@ -915,17 +1214,19 @@
         /* Game Notification */
         .game-notification {
             position: fixed;
-            top: 20px;
+            top: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.9);
             color: white;
-            padding: 15px 30px;
-            border-radius: 5px;
+            padding: 1rem 2rem;
+            border-radius: var(--rounded-md);
             z-index: 1000;
             display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow-lg);
             border-left: 5px solid var(--primary);
+            max-width: 90%;
+            text-align: center;
         }
         
         .game-notification.success {
@@ -939,8 +1240,8 @@
         /* Sound Toggle */
         .sound-toggle {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 1.5rem;
+            right: 1.5rem;
             background: rgba(0,0,0,0.5);
             width: 50px;
             height: 50px;
@@ -950,7 +1251,11 @@
             align-items: center;
             cursor: pointer;
             z-index: 100;
-            transition: all 0.3s;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: none;
+            color: white;
+            font-size: 1.25rem;
         }
         
         .sound-toggle:hover {
@@ -958,153 +1263,22 @@
             background: var(--primary);
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: rgba(44, 62, 80, 0.95);
-            padding: 30px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-            position: relative;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: rgba(255,255,255,0.6);
-            transition: all 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: var(--danger);
-            transform: rotate(90deg);
-        }
-        
-        .modal-form .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .modal-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .modal-form input, .modal-form select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 5px;
-            font-size: 1rem;
-            background: rgba(0,0,0,0.3);
-            color: white;
-            transition: all 0.3s;
-        }
-        
-        .modal-form input:focus, .modal-form select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
-            background: rgba(0,0,0,0.4);
-        }
-        
-        .modal-form button {
-            margin-top: 20px;
-        }
-        
-        .tab-container {
-            margin-bottom: 20px;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            color: rgba(255,255,255,0.7);
-        }
-        
-        .tab.active {
-            border-bottom-color: var(--primary);
-            color: var(--primary);
-            font-weight: bold;
-        }
-        
-        .tab:hover:not(.active) {
-            color: white;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .game-iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            background: rgba(0,0,0,0.3);
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
+        /* Notification */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 1.5rem;
+            right: 1.5rem;
             background: var(--success);
             color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.5rem;
+            border-radius: var(--rounded-md);
+            box-shadow: var(--shadow-lg);
             transform: translateX(200%);
             transition: transform 0.3s ease, opacity 0.3s ease;
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.2);
             max-width: 350px;
@@ -1124,32 +1298,34 @@
         }
         
         .notification.info {
-            background: var(--secondary);
+            background: var(--info);
         }
         
+        /* Footer */
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 1.5rem;
             color: rgba(255,255,255,0.6);
             font-size: 0.9rem;
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
         }
         
+        /* Referral Code */
         .referral-code {
             background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 15px;
+            padding: 1rem;
+            border-radius: var(--rounded-md);
+            margin-top: 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .referral-code:hover {
@@ -1164,33 +1340,38 @@
         .copy-btn {
             background: rgba(255,255,255,0.2);
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            padding: 0.5rem 1rem;
+            border-radius: var(--rounded-sm);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .copy-btn:hover {
             background: rgba(255,255,255,0.3);
         }
         
+        /* Deposit Methods */
         .deposit-methods {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
         
         .method-btn {
             flex: 1;
-            padding: 15px;
-            border-radius: 5px;
+            padding: 1rem;
+            border-radius: var(--rounded-md);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 0.5rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -1211,6 +1392,42 @@
         
         .airtel-btn {
             color: var(--airtel);
+        }
+        
+        /* Change Password Modal */
+        .change-password-form .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        /* Profile Picture Upload */
+        .profile-pic-upload {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .profile-pic-upload input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .profile-pic-upload .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            z-index: 2;
         }
         
         /* Animation classes */
@@ -1279,10 +1496,18 @@
             100% { transform: scale(0) translateY(-100px); opacity: 0; }
         }
         
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .auth-forms {
-                flex-direction: column;
-                align-items: center;
+            .container {
+                padding: 1rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
             }
             
             .actions {
@@ -1299,19 +1524,19 @@
             }
             
             .tab {
-                padding: 8px 12px;
+                padding: 0.5rem 1rem;
                 font-size: 0.9rem;
             }
             
             .modal-content {
                 width: 95%;
-                padding: 20px 15px;
+                padding: 1.5rem;
             }
             
             .game-modal-content {
                 width: 95%;
                 height: 85vh;
-                padding: 15px;
+                padding: 1rem;
             }
             
             .quick-bet-buttons {
@@ -1320,6 +1545,16 @@
             
             .game-stats {
                 flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .deposit-methods {
+                flex-direction: column;
+            }
+            
+            .profile-actions {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -1333,8 +1568,15 @@
     </header>
     
     <div class="container">
-        <div class="auth-forms" id="authForms">
-            <div class="form-container fade-in">
+        <!-- Auth Forms Container -->
+        <div class="auth-container" id="authContainer">
+            <div class="auth-switch">
+                <button class="auth-switch-btn active" id="showLoginBtn">Connexion</button>
+                <button class="auth-switch-btn" id="showRegisterBtn">Inscription</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="form-container" id="loginFormContainer">
                 <h2>Connexion</h2>
                 <form id="loginForm">
                     <div class="form-group">
@@ -1349,7 +1591,8 @@
                 </form>
             </div>
             
-            <div class="form-container fade-in">
+            <!-- Register Form -->
+            <div class="form-container hidden" id="registerFormContainer">
                 <h2>Inscription</h2>
                 <form id="registerForm">
                     <div class="form-group">
@@ -1365,6 +1608,10 @@
                         <input type="password" id="registerPassword" required>
                     </div>
                     <div class="form-group">
+                        <label for="confirmPassword"><i class="fas fa-lock"></i> Confirmer le mot de passe</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <div class="form-group">
                         <label for="referralCode"><i class="fas fa-user-friends"></i> Code de parrainage (optionnel)</label>
                         <input type="text" id="referralCode" placeholder="Code d'un ami">
                     </div>
@@ -1373,18 +1620,36 @@
             </div>
         </div>
         
+        <!-- Dashboard -->
         <div class="dashboard" id="dashboard">
-            <div class="user-info">
-                <h2><i class="fas fa-user-circle"></i> Bonjour, <span id="usernameDisplay"></span>!</h2>
-                <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+            <!-- User Profile Section -->
+            <div class="user-profile">
+                <div class="profile-pic-upload">
+                    <div class="profile-pic" id="profilePic">
+                        <div class="profile-pic-placeholder" id="profileInitials">U</div>
+                    </div>
+                    <input type="file" id="profilePicInput" accept="image/*">
+                    <div class="edit-icon"><i class="fas fa-camera"></i></div>
+                </div>
+                
+                <div class="profile-info">
+                    <h2 id="usernameDisplay"><i class="fas fa-user-circle"></i> <span id="usernameText">Utilisateur</span></h2>
+                    <p id="userPhone"><i class="fas fa-phone"></i> <span id="phoneText">000000000</span></p>
+                    <div class="profile-actions">
+                        <button class="profile-btn" id="changePasswordBtn"><i class="fas fa-key"></i> Changer mot de passe</button>
+                        <button class="profile-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+                    </div>
+                </div>
             </div>
             
+            <!-- Points Display -->
             <div class="points-display pulse">
                 <h2><i class="fas fa-coins"></i> Vos points</h2>
                 <p id="pointsDisplay">0</p>
                 <small>1000 FCFA déposés = 10 points | 1 point = 100 FCFA</small>
             </div>
             
+            <!-- Actions -->
             <div class="actions">
                 <button class="deposit-btn" id="depositBtn"><i class="fas fa-money-bill-wave"></i> Dépôt</button>
                 <button class="withdraw-btn" id="withdrawBtn"><i class="fas fa-wallet"></i> Retrait</button>
@@ -1392,6 +1657,7 @@
                 <button id="wheelBtn"><i class="fas fa-redo"></i> Roue de la chance</button>
             </div>
             
+            <!-- Wheel of Fortune -->
             <div class="wheel-container" id="wheelContainer">
                 <h2><i class="fas fa-redo"></i> Roue de la chance</h2>
                 <div class="wheel-pointer"></div>
@@ -1404,12 +1670,14 @@
                 </p>
             </div>
             
+            <!-- Tabs -->
             <div class="tab-container">
                 <div class="tabs">
                     <div class="tab active" data-tab="games">Jeux</div>
                     <div class="tab" data-tab="history">Historique</div>
                 </div>
                 
+                <!-- Games Tab -->
                 <div class="tab-content active" id="gamesTab">
                     <h2><i class="fas fa-gamepad"></i> Jeux disponibles</h2>
                     <div class="games-container" id="gamesContainer">
@@ -1417,27 +1685,30 @@
                     </div>
                 </div>
                 
+                <!-- History Tab -->
                 <div class="tab-content" id="historyTab">
                     <h2><i class="fas fa-history"></i> Historique des activités</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Activité</th>
-                                <th>Points</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyTable">
-                            <!-- L'historique sera généré dynamiquement -->
-                        </tbody>
-                    </table>
+                    <div class="history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activité</th>
+                                    <th>Points</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTable">
+                                <!-- L'historique sera généré dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Modal de dépôt -->
+    <!-- Deposit Modal -->
     <div class="modal" id="depositModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1473,7 +1744,7 @@
         </div>
     </div>
     
-    <!-- Modal de retrait -->
+    <!-- Withdraw Modal -->
     <div class="modal" id="withdrawModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1509,7 +1780,7 @@
         </div>
     </div>
     
-    <!-- Modal de parrainage -->
+    <!-- Referral Modal -->
     <div class="modal" id="referralModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1522,25 +1793,54 @@
             </div>
             
             <h3 style="margin-top: 20px;"><i class="fas fa-trophy"></i> Vos filleuls</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Pseudo</th>
-                        <th>Date</th>
-                        <th>Statut</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-                <tbody id="referralsTable">
-                    <tr>
-                        <td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="history">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pseudo</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="referralsTable">
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
-    <!-- Modal de jeu -->
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-key"></i> Changer de mot de passe</h2>
+            
+            <form class="modal-form change-password-form" id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword"><i class="fas fa-lock"></i> Mot de passe actuel</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword"><i class="fas fa-lock"></i> Nouveau mot de passe</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword"><i class="fas fa-lock"></i> Confirmer le nouveau mot de passe</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                
+                <button type="submit" id="submitChangePassword"><i class="fas fa-save"></i> Enregistrer</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Game Modal -->
     <div class="game-modal" id="gameModal">
         <div class="game-modal-content">
             <div class="game-header">
@@ -1574,11 +1874,13 @@
         </div>
     </div>
     
+    <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notificationText">Notification message</span>
     </div>
     
+    <!-- Game Notification -->
     <div class="game-notification" id="gameNotification"></div>
     
     <!-- Sound Toggle -->
@@ -1605,7 +1907,7 @@
         const config = {
             minDeposit: 1000, // 1000 FCFA = 10 points
             minWithdraw: 10,  // 10 points = 1000 FCFA
-            pointsToMoneyRatio: 0.1, // 1000 FCFA = 10 points
+            pointsToMoneyRatio: 0.01, // 1000 FCFA = 10 points (1 point = 100 FCFA)
             wheelAttemptsPerDay: 1,
             referralBonus: 20, // Points bonus pour parrainage
             soundEnabled: true,
@@ -1703,6 +2005,7 @@
         let deposits = JSON.parse(localStorage.getItem('africlick_deposits')) || [];
         let withdrawals = JSON.parse(localStorage.getItem('africlick_withdrawals')) || [];
         let referrals = JSON.parse(localStorage.getItem('africlick_referrals')) || [];
+        let profilePictures = JSON.parse(localStorage.getItem('africlick_profile_pics')) || {};
         
         // Variables de jeu
         let currentGame = null;
@@ -1715,13 +2018,22 @@
         let diamondsFound = 0;
         
         // Éléments du DOM
-        const authForms = document.getElementById('authForms');
+        const authContainer = document.getElementById('authContainer');
         const dashboard = document.getElementById('dashboard');
+        const showLoginBtn = document.getElementById('showLoginBtn');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const loginFormContainer = document.getElementById('loginFormContainer');
+        const registerFormContainer = document.getElementById('registerFormContainer');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
-        const usernameDisplay = document.getElementById('usernameDisplay');
+        const profilePic = document.getElementById('profilePic');
+        const profileInitials = document.getElementById('profileInitials');
+        const profilePicInput = document.getElementById('profilePicInput');
+        const usernameText = document.getElementById('usernameText');
+        const phoneText = document.getElementById('phoneText');
         const pointsDisplay = document.getElementById('pointsDisplay');
         const logoutBtn = document.getElementById('logoutBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
         const gamesContainer = document.getElementById('gamesContainer');
         const historyTable = document.getElementById('historyTable');
         const wheelBtn = document.getElementById('wheelBtn');
@@ -1735,17 +2047,23 @@
         const depositModal = document.getElementById('depositModal');
         const withdrawModal = document.getElementById('withdrawModal');
         const referralModal = document.getElementById('referralModal');
+        const changePasswordModal = document.getElementById('changePasswordModal');
         const closeModals = document.querySelectorAll('.close-modal');
         const depositForm = document.getElementById('depositForm');
         const withdrawForm = document.getElementById('withdrawForm');
+        const changePasswordForm = document.getElementById('changePasswordForm');
         const depositAmount = document.getElementById('depositAmount');
         const depositPhone = document.getElementById('depositPhone');
         const depositMethod = document.getElementById('depositMethod');
         const withdrawAmount = document.getElementById('withdrawAmount');
         const withdrawMethod = document.getElementById('withdrawMethod');
         const withdrawPhone = document.getElementById('withdrawPhone');
+        const currentPassword = document.getElementById('currentPassword');
+        const newPassword = document.getElementById('newPassword');
+        const confirmNewPassword = document.getElementById('confirmNewPassword');
         const submitDeposit = document.getElementById('submitDeposit');
         const submitWithdraw = document.getElementById('submitWithdraw');
+        const submitChangePassword = document.getElementById('submitChangePassword');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notificationText');
         const tabs = document.querySelectorAll('.tab');
@@ -1783,9 +2101,15 @@
         
         function setupEventListeners() {
             // Authentification
+            showLoginBtn.addEventListener('click', () => switchAuthForm('login'));
+            showRegisterBtn.addEventListener('click', () => switchAuthForm('register'));
             loginForm.addEventListener('submit', handleLogin);
             registerForm.addEventListener('submit', handleRegister);
             logoutBtn.addEventListener('click', handleLogout);
+            
+            // Profil
+            changePasswordBtn.addEventListener('click', () => changePasswordModal.style.display = 'flex');
+            profilePicInput.addEventListener('change', handleProfilePicUpload);
             
             // Roue de la chance
             wheelBtn.addEventListener('click', toggleWheel);
@@ -1796,11 +2120,13 @@
             withdrawBtn.addEventListener('click', openWithdrawModal);
             referralBtn.addEventListener('click', openReferralModal);
             
+            // Fermeture des modals
             closeModals.forEach(btn => {
                 btn.addEventListener('click', () => {
                     depositModal.style.display = 'none';
                     withdrawModal.style.display = 'none';
                     referralModal.style.display = 'none';
+                    changePasswordModal.style.display = 'none';
                     gameModal.style.display = 'none';
                     resetGame();
                 });
@@ -1821,8 +2147,10 @@
                 });
             });
             
+            // Formulaires
             depositForm.addEventListener('submit', handleDeposit);
             withdrawForm.addEventListener('submit', handleWithdraw);
+            changePasswordForm.addEventListener('submit', handleChangePassword);
             
             // Parrainage
             copyReferralBtn.addEventListener('click', copyReferralCode);
@@ -1837,6 +2165,7 @@
                 if (e.target === depositModal) depositModal.style.display = 'none';
                 if (e.target === withdrawModal) withdrawModal.style.display = 'none';
                 if (e.target === referralModal) referralModal.style.display = 'none';
+                if (e.target === changePasswordModal) changePasswordModal.style.display = 'none';
                 if (e.target === gameModal) {
                     gameModal.style.display = 'none';
                     resetGame();
@@ -1849,6 +2178,20 @@
             
             // Sound toggle
             soundToggle.addEventListener('click', toggleSound);
+        }
+        
+        function switchAuthForm(formType) {
+            if (formType === 'login') {
+                showLoginBtn.classList.add('active');
+                showRegisterBtn.classList.remove('active');
+                loginFormContainer.classList.remove('hidden');
+                registerFormContainer.classList.add('hidden');
+            } else {
+                showLoginBtn.classList.remove('active');
+                showRegisterBtn.classList.add('active');
+                loginFormContainer.classList.add('hidden');
+                registerFormContainer.classList.remove('hidden');
+            }
         }
         
         function checkAuth() {
@@ -1883,6 +2226,7 @@
             const username = document.getElementById('registerUsername').value.trim();
             const phone = document.getElementById('registerPhone').value.trim();
             const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
             const referralCode = document.getElementById('referralCode').value.trim();
             
             // Validation
@@ -1902,6 +2246,13 @@
             
             if (password.length < 6) {
                 showNotification('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                registerForm.classList.add('shake');
+                setTimeout(() => registerForm.classList.remove('shake'), 500);
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Les mots de passe ne correspondent pas', 'error');
                 registerForm.classList.add('shake');
                 setTimeout(() => registerForm.classList.remove('shake'), 500);
                 return;
@@ -1970,7 +2321,7 @@
         function handleLogout() {
             currentUser = null;
             localStorage.removeItem('africlick_currentUser');
-            authForms.style.display = 'flex';
+            authContainer.style.display = 'flex';
             dashboard.style.display = 'none';
             wheelContainer.style.display = 'none';
             
@@ -1982,15 +2333,24 @@
         }
         
         function showDashboard() {
-            authForms.style.display = 'none';
+            authContainer.style.display = 'none';
             dashboard.style.display = 'block';
             
             // Mettre à jour les informations utilisateur
-            usernameDisplay.textContent = currentUser.username;
+            usernameText.textContent = currentUser.username;
+            phoneText.textContent = currentUser.phone;
+            profileInitials.textContent = currentUser.username.charAt(0).toUpperCase();
             pointsDisplay.textContent = currentUser.points;
             gameBalanceDisplay.textContent = currentUser.points;
             wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft || 0;
             wheelMultiplierDisplay.textContent = currentUser.wheelMultiplier || 1;
+            
+            // Charger la photo de profil si elle existe
+            if (profilePictures[currentUser.id]) {
+                profilePic.innerHTML = `<img src="${profilePictures[currentUser.id]}" alt="Profile" class="profile-pic">`;
+            } else {
+                profilePic.innerHTML = `<div class="profile-pic-placeholder">${currentUser.username.charAt(0).toUpperCase()}</div>`;
+            }
             
             // Vérifier les tentatives de roue
             checkWheelAttempts();
@@ -2005,6 +2365,65 @@
             
             // Mettre à jour la table des filleuls
             renderReferralsTable();
+        }
+        
+        function handleProfilePicUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imgUrl = event.target.result;
+                profilePictures[currentUser.id] = imgUrl;
+                localStorage.setItem('africlick_profile_pics', JSON.stringify(profilePictures));
+                
+                profilePic.innerHTML = `<img src="${imgUrl}" alt="Profile" class="profile-pic">`;
+                showNotification('Photo de profil mise à jour', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function handleChangePassword(e) {
+            e.preventDefault();
+            const currentPass = currentPassword.value;
+            const newPass = newPassword.value;
+            const confirmPass = confirmNewPassword.value;
+            
+            if (currentPass !== currentUser.password) {
+                showNotification('Mot de passe actuel incorrect', 'error');
+                changePasswordForm.classList.add('shake');
+                setTimeout(() => changePasswordForm.classList.remove('shake'), 500);
+                return;
+            }
+            
+            if (newPass.length < 6) {
+                showNotification('Le nouveau mot de passe doit contenir au moins 6 caractères', 'error');
+                changePasswordForm.classList.add('shake');
+                setTimeout(() => changePasswordForm.classList.remove('shake'), 500);
+                return;
+            }
+            
+            if (newPass !== confirmPass) {
+                showNotification('Les nouveaux mots de passe ne correspondent pas', 'error');
+                changePasswordForm.classList.add('shake');
+                setTimeout(() => changePasswordForm.classList.remove('shake'), 500);
+                return;
+            }
+            
+            // Mettre à jour le mot de passe
+            currentUser.password = newPass;
+            
+            // Mettre à jour dans le tableau des utilisateurs
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('africlick_users', JSON.stringify(users));
+                localStorage.setItem('africlick_currentUser', JSON.stringify(currentUser));
+            }
+            
+            changePasswordModal.style.display = 'none';
+            changePasswordForm.reset();
+            showNotification('Mot de passe changé avec succès', 'success');
         }
         
         function renderGames() {
@@ -2760,31 +3179,32 @@
             
             // Animate the ball
             const ball = document.getElementById('limboBall');
-            const barHeight = document.querySelector('.limbo-bar').offsetHeight;
-            const ballPosition = barHeight * (1 - (multiplier / 100));
+            // Set initial position
+            ball.style.bottom = '0px';
             
+            // Animate ball movement
             gsap.to(ball, {
-                top: `${ballPosition}px`,
+                bottom: `${multiplier * 10}px`,
                 duration: 2,
-                ease: "bounce.out",
+                ease: "power1.out",
                 onComplete: () => {
-                    const win = multiplier >= target;
-                    const payout = win ? Math.floor(currentBet * (target / 1.01)) : -currentBet;
+                    const win = multiplier < target;
+                    const winnings = win ? Math.floor(currentBet * (target / multiplier)) : -currentBet;
                     
                     // Update user points
-                    currentUser.points += payout;
+                    currentUser.points += winnings;
                     updateUserData();
                     gameBalanceDisplay.textContent = currentUser.points;
                     pointsDisplay.textContent = currentUser.points;
                     
                     if (win) {
-                        gameLastWin.textContent = Math.floor(currentBet * (target / 1.01));
+                        gameLastWin.textContent = Math.floor(currentBet * (target / multiplier));
                         playSound(winSound);
-                        showGameNotification(`Félicitations! Multiplicateur ${multiplier.toFixed(2)}x (cible: ${target}x). Vous gagnez ${Math.floor(currentBet * (target / 1.01))} points!`, 'success');
+                        showGameNotification(`Félicitations! Le multiplicateur est ${multiplier.toFixed(2)}x (votre cible: ${target}x). Vous gagnez ${Math.floor(currentBet * (target / multiplier))} points!`, 'success');
                     } else {
                         gameLastWin.textContent = -currentBet;
                         playSound(loseSound);
-                        showGameNotification(`Dommage! Multiplicateur ${multiplier.toFixed(2)}x (cible: ${target}x). Vous perdez ${currentBet} points.`, 'error');
+                        showGameNotification(`Dommage! Le multiplicateur est ${multiplier.toFixed(2)}x (votre cible: ${target}x). Vous perdez ${currentBet} points.`, 'error');
                     }
                     
                     // Add to history
@@ -2792,7 +3212,7 @@
                     const gameHistory = {
                         date: now.toLocaleString(),
                         game: currentGame.title,
-                        points: payout,
+                        points: winnings,
                         status: win ? 'Gagné' : 'Perdu'
                     };
                     
@@ -2808,38 +3228,38 @@
         
         function spinCrazyWheel() {
             const wheel = document.querySelector('.crazy-wheel');
-            const spinDuration = 3000; // 3 seconds
+            const segments = 8;
+            const segmentDegrees = 360 / segments;
+            const spinDuration = 3 + Math.random() * 2;
+            const spinDegrees = 1800 + Math.floor(Math.random() * 360);
+            const winningSegment = Math.floor(Math.random() * segments);
             
-            // Disable button during spin
-            document.getElementById('spinCrazyWheel').disabled = true;
-            
-            // Spin animation
+            // Animate wheel spin
             gsap.to(wheel, {
-                rotation: 360 * 5 + Math.random() * 360,
-                duration: spinDuration / 1000,
-                ease: "back.out(2)",
+                rotation: spinDegrees,
+                duration: spinDuration,
+                ease: "back.out(0.5)",
                 onComplete: () => {
-                    // Determine prize (simplified)
-                    const segments = [
-                        { multiplier: 1, color: 'var(--primary)' },
-                        { multiplier: 2, color: 'var(--secondary)' },
-                        { multiplier: 5, color: 'var(--accent)' },
-                        { multiplier: 10, color: 'var(--success)' },
-                        { multiplier: 20, color: 'var(--warning)' }
-                    ];
-                    
-                    const normalizedRotation = wheel._gsap.rotation % 360;
-                    const segmentSize = 360 / segments.length;
-                    const winningSegment = segments[Math.floor(normalizedRotation / segmentSize)];
-                    
-                    const winnings = Math.floor(currentBet * winningSegment.multiplier);
+                    // Determine prize based on segment
+                    const prizes = [50, 20, 30, -10, 10, 25, 15, 100];
+                    const prize = prizes[winningSegment] * currentBet / 10;
+                    const winnings = Math.floor(prize);
                     
                     // Update user points
                     currentUser.points += winnings;
                     updateUserData();
                     gameBalanceDisplay.textContent = currentUser.points;
                     pointsDisplay.textContent = currentUser.points;
-                    gameLastWin.textContent = winnings;
+                    
+                    if (winnings > 0) {
+                        gameLastWin.textContent = winnings;
+                        playSound(winSound);
+                        showGameNotification(`Félicitations! Vous avez gagné ${winnings} points!`, 'success');
+                    } else {
+                        gameLastWin.textContent = winnings;
+                        playSound(loseSound);
+                        showGameNotification(`Dommage! Vous avez perdu ${Math.abs(winnings)} points.`, 'error');
+                    }
                     
                     // Add to history
                     const now = new Date();
@@ -2847,19 +3267,12 @@
                         date: now.toLocaleString(),
                         game: currentGame.title,
                         points: winnings,
-                        status: 'Gagné'
+                        status: winnings > 0 ? 'Gagné' : 'Perdu'
                     };
                     
                     currentUser.history.unshift(gameHistory);
                     updateUserData();
                     renderHistory();
-                    
-                    // Show result
-                    showGameNotification(`Félicitations! Vous avez gagné ${winnings} points (${winningSegment.multiplier}x)!`, 'success');
-                    playSound(winSound);
-                    
-                    // Re-enable button
-                    document.getElementById('spinCrazyWheel').disabled = false;
                     
                     // Reset for next bet
                     resetGameControls();
@@ -2868,71 +3281,86 @@
         }
         
         function startSweetBonanzaGame() {
-            // Animate symbols
+            // Animate all cells
             const cells = document.querySelectorAll('.bonanza-cell');
             cells.forEach(cell => {
-                gsap.to(cell, {
-                    scale: 1.2,
-                    duration: 0.3,
-                    yoyo: true,
-                    repeat: 1
+                gsap.from(cell, {
+                    scale: 0,
+                    rotation: 360,
+                    duration: 0.5,
+                    delay: Math.random() * 0.5
                 });
             });
             
-            // Check for wins (simplified)
+            // Check for matches after animation
             setTimeout(() => {
-                // Random win chance (40%)
-                if (Math.random() < 0.4) {
-                    const multiplier = Math.floor(Math.random() * 10) + 1;
-                    const winnings = Math.floor(currentBet * multiplier);
-                    
-                    // Update user points
-                    currentUser.points += winnings;
-                    updateUserData();
-                    gameBalanceDisplay.textContent = currentUser.points;
-                    pointsDisplay.textContent = currentUser.points;
+                const symbols = Array.from(cells).map(cell => cell.textContent);
+                let matches = 0;
+                
+                // Check horizontal lines
+                for (let i = 0; i < 3; i++) {
+                    const line = symbols.slice(i * 5, (i + 1) * 5);
+                    if (new Set(line).size === 1) matches++;
+                }
+                
+                // Check vertical lines
+                for (let i = 0; i < 5; i++) {
+                    const line = [symbols[i], symbols[i + 5], symbols[i + 10]];
+                    if (new Set(line).size === 1) matches++;
+                }
+                
+                // Check diagonals
+                if (symbols[0] === symbols[6] && symbols[6] === symbols[12]) matches++;
+                if (symbols[4] === symbols[8] && symbols[8] === symbols[12]) matches++;
+                
+                // Calculate winnings
+                const winnings = matches > 0 ? Math.floor(currentBet * (1 + matches * 0.5)) : -currentBet;
+                
+                // Update user points
+                currentUser.points += winnings;
+                updateUserData();
+                gameBalanceDisplay.textContent = currentUser.points;
+                pointsDisplay.textContent = currentUser.points;
+                
+                if (winnings > 0) {
                     gameLastWin.textContent = winnings;
-                    
-                    // Add to history
-                    const now = new Date();
-                    const gameHistory = {
-                        date: now.toLocaleString(),
-                        game: currentGame.title,
-                        points: winnings,
-                        status: 'Gagné'
-                    };
-                    
-                    currentUser.history.unshift(gameHistory);
-                    updateUserData();
-                    renderHistory();
-                    
-                    // Highlight winning symbols
-                    const symbols = ['🍒', '🍋', '🍊', '🍇', '🍉', '🍓', '7️⃣'];
-                    const winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                    
-                    cells.forEach(cell => {
-                        if (cell.textContent === winningSymbol) {
-                            gsap.to(cell, {
-                                scale: 1.5,
-                                backgroundColor: 'var(--success)',
-                                duration: 0.5,
-                                yoyo: true,
-                                repeat: 1
-                            });
-                        }
-                    });
-                    
-                    showGameNotification(`Félicitations! Vous avez gagné ${winnings} points (${multiplier}x)!`, 'success');
                     playSound(winSound);
+                    showGameNotification(`Félicitations! Vous avez ${matches} ligne(s) gagnante(s) et remporté ${winnings} points!`, 'success');
+                    
+                    // Highlight winning lines
+                    if (matches > 0) {
+                        // This would be more sophisticated in a real game
+                        cells.forEach(cell => {
+                            gsap.to(cell, {
+                                scale: 1.2,
+                                duration: 0.3,
+                                yoyo: true,
+                                repeat: 3
+                            });
+                        });
+                    }
                 } else {
                     gameLastWin.textContent = -currentBet;
                     playSound(loseSound);
-                    showGameNotification(`Dommage! Vous perdez ${currentBet} points.`, 'error');
+                    showGameNotification(`Dommage! Aucune ligne gagnante. Vous perdez ${currentBet} points.`, 'error');
                 }
+                
+                // Add to history
+                const now = new Date();
+                const gameHistory = {
+                    date: now.toLocaleString(),
+                    game: currentGame.title,
+                    points: winnings,
+                    status: winnings > 0 ? 'Gagné' : 'Perdu'
+                };
+                
+                currentUser.history.unshift(gameHistory);
+                updateUserData();
+                renderHistory();
                 
                 // Reset for next bet
                 resetGameControls();
-            }, 2000);
+            }, 1000);
         }
         
         function spinSlots() {
@@ -2942,134 +3370,159 @@
                 document.getElementById('reel3')
             ];
             
-            const symbols = ['7', '🍒', '🍋', '🍊', '🍇', '💰'];
+            const symbols = ['7', '🍒', '🍋', '🍊', '🍇', '🍉', '🍓'];
+            const spinDuration = 1 + Math.random();
             
-            // Disable button during spin
-            document.getElementById('spinSlots').disabled = true;
-            
-            // Spin each reel
+            // Animate each reel
             reels.forEach((reel, index) => {
-                // Clear previous symbols
-                reel.innerHTML = '';
+                // Create animation sequence
+                const sequence = [];
+                const spins = 10 + Math.floor(Math.random() * 5);
                 
-                // Add animation symbols
-                for (let i = 0; i < 5; i++) {
-                    const symbol = document.createElement('div');
-                    symbol.className = 'slot-symbol';
-                    symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                    reel.appendChild(symbol);
+                for (let i = 0; i < spins; i++) {
+                    sequence.push({
+                        innerHTML: `<div class="slot-symbol">${symbols[Math.floor(Math.random() * symbols.length)]}</div>`,
+                        duration: 0.1
+                    });
                 }
                 
-                // Animate spinning
+                // Final symbol (determined randomly)
+                const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                sequence.push({
+                    innerHTML: `<div class="slot-symbol">${finalSymbol}</div>`,
+                    duration: 0.3
+                });
+                
+                // Animate reel
                 gsap.to(reel, {
-                    y: -480,
-                    duration: 1 + index * 0.3,
-                    ease: "back.out(1)",
+                    keyframes: sequence,
+                    delay: index * 0.2,
                     onComplete: () => {
                         if (index === reels.length - 1) {
-                            // All reels stopped, check result
-                            const results = reels.map(reel => reel.lastChild.textContent);
-                            
-                            // Check for wins (simplified)
-                            if (results[0] === results[1] && results[1] === results[2]) {
-                                // All symbols match
-                                let multiplier = 1;
-                                if (results[0] === '7') multiplier = 10;
-                                else if (results[0] === '💰') multiplier = 5;
-                                else multiplier = 3;
-                                
-                                const winnings = Math.floor(currentBet * multiplier);
-                                
-                                // Update user points
-                                currentUser.points += winnings;
-                                updateUserData();
-                                gameBalanceDisplay.textContent = currentUser.points;
-                                pointsDisplay.textContent = currentUser.points;
-                                gameLastWin.textContent = winnings;
-                                
-                                // Add to history
-                                const now = new Date();
-                                const gameHistory = {
-                                    date: now.toLocaleString(),
-                                    game: currentGame.title,
-                                    points: winnings,
-                                    status: 'Gagné'
-                                };
-                                
-                                currentUser.history.unshift(gameHistory);
-                                updateUserData();
-                                renderHistory();
-                                
-                                // Highlight winning symbols
-                                reels.forEach(reel => {
-                                    gsap.to(reel.lastChild, {
-                                        scale: 1.5,
-                                        backgroundColor: 'var(--success)',
-                                        duration: 0.5,
-                                        yoyo: true,
-                                        repeat: 1
-                                    });
-                                });
-                                
-                                showGameNotification(`Félicitations! ${results[0]} ${results[0]} ${results[0]} - Vous gagnez ${winnings} points (${multiplier}x)!`, 'success');
-                                playSound(winSound);
-                            } else {
-                                gameLastWin.textContent = -currentBet;
-                                playSound(loseSound);
-                                showGameNotification(`Dommage! ${results[0]} ${results[1]} ${results[2]} - Vous perdez ${currentBet} points.`, 'error');
-                            }
-                            
-                            // Re-enable button
-                            document.getElementById('spinSlots').disabled = false;
-                            
-                            // Reset for next bet
-                            resetGameControls();
+                            // All reels stopped - check for wins
+                            checkSlotWin();
                         }
                     }
                 });
             });
         }
         
+        function checkSlotWin() {
+            const reels = [
+                document.getElementById('reel1'),
+                document.getElementById('reel2'),
+                document.getElementById('reel3')
+            ];
+            
+            // Get symbols
+            const symbols = reels.map(reel => reel.querySelector('.slot-symbol').textContent);
+            
+            // Check for matches
+            let win = false;
+            let multiplier = 1;
+            
+            // Three of a kind
+            if (new Set(symbols).size === 1) {
+                win = true;
+                multiplier = symbols[0] === '7' ? 5 : 3;
+            } 
+            // Two of a kind (first two)
+            else if (symbols[0] === symbols[1]) {
+                win = true;
+                multiplier = 1.5;
+            }
+            
+            // Calculate winnings
+            const winnings = win ? Math.floor(currentBet * multiplier) : -currentBet;
+            
+            // Update user points
+            currentUser.points += winnings;
+            updateUserData();
+            gameBalanceDisplay.textContent = currentUser.points;
+            pointsDisplay.textContent = currentUser.points;
+            
+            if (win) {
+                gameLastWin.textContent = Math.floor(currentBet * multiplier);
+                playSound(winSound);
+                showGameNotification(`Félicitations! ${multiplier === 5 ? 'Jackpot!' : 'Gagné!'} Vous remportez ${Math.floor(currentBet * multiplier)} points!`, 'success');
+                
+                // Animate winning reels
+                reels.forEach(reel => {
+                    gsap.to(reel, {
+                        backgroundColor: 'var(--success)',
+                        duration: 0.3,
+                        yoyo: true,
+                        repeat: 3
+                    });
+                });
+            } else {
+                gameLastWin.textContent = -currentBet;
+                playSound(loseSound);
+                showGameNotification(`Dommage! Pas de combinaison gagnante. Vous perdez ${currentBet} points.`, 'error');
+            }
+            
+            // Add to history
+            const now = new Date();
+            const gameHistory = {
+                date: now.toLocaleString(),
+                game: currentGame.title,
+                points: winnings,
+                status: win ? 'Gagné' : 'Perdu'
+            };
+            
+            currentUser.history.unshift(gameHistory);
+            updateUserData();
+            renderHistory();
+            
+            // Reset for next bet
+            resetGameControls();
+        }
+        
         function playRoulette(betType) {
+            // Spin the wheel
             const wheel = document.querySelector('.roulette-wheel');
             const ball = document.querySelector('.roulette-ball');
+            const spinDuration = 3 + Math.random() * 2;
+            const spinDegrees = 1800 + Math.floor(Math.random() * 360);
             
-            // Disable buttons during spin
-            document.getElementById('betRed').disabled = true;
-            document.getElementById('betBlack').disabled = true;
-            document.getElementById('betGreen').disabled = true;
-            
-            // Spin animation
+            // Animate wheel and ball
             gsap.to(wheel, {
-                rotation: 360 * 5 + Math.random() * 360,
-                duration: 3,
-                ease: "back.out(2)"
+                rotation: spinDegrees,
+                duration: spinDuration,
+                ease: "back.out(0.5)"
             });
             
-            // Ball animation
             gsap.to(ball, {
-                y: 80,
-                duration: 1.5,
-                yoyo: true,
-                repeat: 1,
-                ease: "sine.inOut",
+                rotation: spinDegrees * 2,
+                duration: spinDuration,
+                ease: "power1.out",
                 onComplete: () => {
-                    // Determine result (simplified)
-                    const result = Math.floor(Math.random() * 37); // 0-36
+                    // Determine winning number (0-36)
+                    const winningNumber = Math.floor(Math.random() * 37);
+                    let winningColor = 'green';
+                    
+                    if (winningNumber === 0) {
+                        winningColor = 'green';
+                    } else if (winningNumber % 2 === 0) {
+                        winningColor = 'black';
+                    } else {
+                        winningColor = 'red';
+                    }
+                    
+                    // Determine if player won
                     let win = false;
                     let multiplier = 1;
                     
-                    if (betType === 'red' && (result % 2 === 1 && result !== 0)) {
+                    if ((betType === 'red' && winningColor === 'red') || 
+                        (betType === 'black' && winningColor === 'black')) {
                         win = true;
                         multiplier = 2;
-                    } else if (betType === 'black' && (result % 2 === 0 && result !== 0)) {
+                    } else if (betType === 'green' && winningColor === 'green') {
                         win = true;
-                        multiplier = 2;
-                    } else if (betType === 'green' && result === 0) {
-                        win = true;
-                        multiplier = 36;
+                        multiplier = 14;
                     }
                     
+                    // Calculate winnings
                     const winnings = win ? Math.floor(currentBet * multiplier) : -currentBet;
                     
                     // Update user points
@@ -3081,11 +3534,11 @@
                     if (win) {
                         gameLastWin.textContent = Math.floor(currentBet * multiplier);
                         playSound(winSound);
-                        showGameNotification(`Félicitations! Le résultat est ${result} (${betType}). Vous gagnez ${Math.floor(currentBet * multiplier)} points!`, 'success');
+                        showGameNotification(`Félicitations! La bille s'est arrêtée sur ${winningNumber} (${winningColor}). Vous gagnez ${Math.floor(currentBet * multiplier)} points!`, 'success');
                     } else {
                         gameLastWin.textContent = -currentBet;
                         playSound(loseSound);
-                        showGameNotification(`Dommage! Le résultat est ${result}. Vous perdez ${currentBet} points.`, 'error');
+                        showGameNotification(`Dommage! La bille s'est arrêtée sur ${winningNumber} (${winningColor}). Vous perdez ${currentBet} points.`, 'error');
                     }
                     
                     // Add to history
@@ -3101,468 +3554,372 @@
                     updateUserData();
                     renderHistory();
                     
-                    // Re-enable buttons
-                    document.getElementById('betRed').disabled = false;
-                    document.getElementById('betBlack').disabled = false;
-                    document.getElementById('betGreen').disabled = false;
-                    
                     // Reset for next bet
                     resetGameControls();
                 }
             });
         }
         
-        function endAviatorGame(cashedOut = false) {
+        function endAviatorGame() {
             clearInterval(gameInterval);
             
             const airplane = document.getElementById('airplane');
             const multiplierDisplay = document.getElementById('multiplierDisplay');
-            const winnings = Math.floor(currentBet * currentMultiplier);
             
-            if (cashedOut) {
-                currentUser.points += winnings;
-                
-                // Ajouter à l'historique
-                const now = new Date();
-                const gameHistory = {
-                    date: now.toLocaleString(),
-                    game: currentGame.title,
-                    points: winnings,
-                    status: 'Gagné'
-                };
-                
-                currentUser.history.unshift(gameHistory);
-                updateUserData();
-                renderHistory();
-                
-                multiplierDisplay.innerHTML = `<span style="color: var(--success);">${currentMultiplier.toFixed(2)}x - ${winnings} points gagnés!</span>`;
-                showGameNotification(`Félicitations! Vous avez gagné ${winnings} points!`, 'success');
-                playSound(winSound);
-                
-                // Animate airplane flying away
-                gsap.to(airplane, {
-                    top: '-100px',
-                    rotation: -20,
-                    duration: 1,
-                    onComplete: () => {
-                        resetGameControls();
-                    }
-                });
-            } else {
-                multiplierDisplay.innerHTML = `<span style="color: var(--danger);">${currentMultiplier.toFixed(2)}x - Explosion!</span>`;
-                showGameNotification(`Dommage! Vous avez perdu ${currentBet} points.`, 'error');
-                playSound(explosionSound);
-                
-                // Animate crash
-                gsap.to(airplane, {
-                    rotation: 360,
-                    scale: 1.5,
-                    duration: 0.5,
-                    onComplete: () => {
-                        gsap.to(airplane, {
-                            rotation: 0,
-                            scale: 1,
-                            duration: 0.3
-                        });
-                        resetGameControls();
-                    }
-                });
-            }
+            // Animate crash
+            gsap.to(airplane, {
+                rotation: 360,
+                scale: 0,
+                duration: 1,
+                onComplete: () => {
+                    // Calculate winnings
+                    const winnings = Math.floor(currentBet * currentMultiplier);
+                    
+                    // Update user points
+                    currentUser.points += winnings;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    gameLastWin.textContent = winnings;
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: winnings,
+                        status: 'Gagné'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    showGameNotification(`Félicitations! Vous avez récupéré votre mise à ${currentMultiplier.toFixed(2)}x et gagné ${winnings} points!`, 'success');
+                    playSound(winSound);
+                    resetGameControls();
+                }
+            });
             
-            pointsDisplay.textContent = currentUser.points;
-            gameBalanceDisplay.textContent = currentUser.points;
-            gameLastWin.textContent = cashedOut ? winnings : -currentBet;
+            multiplierDisplay.style.color = 'var(--danger)';
         }
         
-        function endJetXGame(cashedOut = false) {
+        function endJetXGame() {
             clearInterval(gameInterval);
             
             const jet = document.getElementById('jet');
             const multiplierDisplay = document.getElementById('multiplierDisplay');
-            const winnings = Math.floor(currentBet * currentMultiplier);
             
-            if (cashedOut) {
-                currentUser.points += winnings;
-                
-                // Ajouter à l'historique
-                const now = new Date();
-                const gameHistory = {
-                    date: now.toLocaleString(),
-                    game: currentGame.title,
-                    points: winnings,
-                    status: 'Gagné'
-                };
-                
-                currentUser.history.unshift(gameHistory);
-                updateUserData();
-                renderHistory();
-                
-                multiplierDisplay.innerHTML = `<span style="color: var(--success);">${currentMultiplier.toFixed(2)}x - ${winnings} points gagnés!</span>`;
-                showGameNotification(`Félicitations! Vous avez gagné ${winnings} points!`, 'success');
-                playSound(winSound);
-                
-                // Animate jet flying away
-                gsap.to(jet, {
-                    left: '100%',
-                    rotation: 20,
-                    duration: 1,
-                    onComplete: () => {
-                        resetGameControls();
-                    }
-                });
-            } else {
-                multiplierDisplay.innerHTML = `<span style="color: var(--danger);">${currentMultiplier.toFixed(2)}x - Explosion!</span>`;
-                showGameNotification(`Dommage! Vous avez perdu ${currentBet} points.`, 'error');
-                playSound(explosionSound);
-                
-                // Animate explosion
-                gsap.to(jet, {
-                    scale: 1.5,
-                    rotation: 360,
-                    duration: 0.5,
-                    onComplete: () => {
-                        gsap.to(jet, {
-                            scale: 1,
-                            rotation: 0,
-                            duration: 0.3
-                        });
-                        resetGameControls();
-                    }
-                });
-            }
+            // Animate explosion
+            gsap.to(jet, {
+                scale: 2,
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    // Calculate winnings
+                    const winnings = Math.floor(currentBet * currentMultiplier);
+                    
+                    // Update user points
+                    currentUser.points += winnings;
+                    updateUserData();
+                    gameBalanceDisplay.textContent = currentUser.points;
+                    pointsDisplay.textContent = currentUser.points;
+                    gameLastWin.textContent = winnings;
+                    
+                    // Add to history
+                    const now = new Date();
+                    const gameHistory = {
+                        date: now.toLocaleString(),
+                        game: currentGame.title,
+                        points: winnings,
+                        status: 'Gagné'
+                    };
+                    
+                    currentUser.history.unshift(gameHistory);
+                    updateUserData();
+                    renderHistory();
+                    
+                    showGameNotification(`Félicitations! Vous avez récupéré votre mise à ${currentMultiplier.toFixed(2)}x et gagné ${winnings} points!`, 'success');
+                    playSound(winSound);
+                    resetGameControls();
+                }
+            });
             
-            pointsDisplay.textContent = currentUser.points;
-            gameBalanceDisplay.textContent = currentUser.points;
-            gameLastWin.textContent = cashedOut ? winnings : -currentBet;
+            multiplierDisplay.style.color = 'var(--danger)';
+            playSound(explosionSound);
         }
         
         function cashoutGame() {
             if (!gameStarted) return;
             
-            // Play cashout sound
-            playSound(coinSound);
+            clearInterval(gameInterval);
             
-            switch(currentGame.title.toLowerCase()) {
-                case 'aviator':
-                    endAviatorGame(true);
-                    break;
-                case 'jetx':
-                    endJetXGame(true);
-                    break;
-                case 'plinko':
-                    // Plinko doesn't have cashout
-                    break;
-                case 'mines':
-                    // Mines cashout (if diamonds found)
-                    if (diamondsFound > 0) {
-                        const winnings = currentBet * 2 * diamondsFound;
-                        currentUser.points += winnings;
-                        updateUserData();
-                        gameBalanceDisplay.textContent = currentUser.points;
-                        pointsDisplay.textContent = currentUser.points;
-                        gameLastWin.textContent = winnings;
-                        
-                        // Add to history
-                        const now = new Date();
-                        const gameHistory = {
-                            date: now.toLocaleString(),
-                            game: currentGame.title,
-                            points: winnings,
-                            status: 'Gagné'
-                        };
-                        
-                        currentUser.history.unshift(gameHistory);
-                        updateUserData();
-                        renderHistory();
-                        
-                        showGameNotification(`Vous avez récupéré ${winnings} points pour ${diamondsFound} diamants trouvés!`, 'success');
-                        playSound(winSound);
-                    }
-                    resetGameControls();
-                    break;
+            // Calculate winnings
+            const winnings = Math.floor(currentBet * currentMultiplier);
+            
+            // Update user points
+            currentUser.points += winnings;
+            updateUserData();
+            gameBalanceDisplay.textContent = currentUser.points;
+            pointsDisplay.textContent = currentUser.points;
+            gameLastWin.textContent = winnings;
+            
+            // Add to history
+            const now = new Date();
+            const gameHistory = {
+                date: now.toLocaleString(),
+                game: currentGame.title,
+                points: winnings,
+                status: 'Gagné'
+            };
+            
+            currentUser.history.unshift(gameHistory);
+            updateUserData();
+            renderHistory();
+            
+            showGameNotification(`Félicitations! Vous avez récupéré votre mise à ${currentMultiplier.toFixed(2)}x et gagné ${winnings} points!`, 'success');
+            playSound(winSound);
+            resetGameControls();
+        }
+        
+        function resetGameControls() {
+            gameStarted = false;
+            currentBet = 0;
+            gameBetBtn.disabled = false;
+            gameCashoutBtn.style.display = 'none';
+            
+            // Reset game-specific elements
+            if (currentGame) {
+                switch(currentGame.title.toLowerCase()) {
+                    case 'aviator':
+                        document.getElementById('airplane').style.top = '0px';
+                        document.getElementById('multiplierDisplay').textContent = '1.00x';
+                        document.getElementById('multiplierDisplay').style.color = 'white';
+                        break;
+                    case 'jetx':
+                        document.getElementById('jet').style.left = '50px';
+                        document.getElementById('multiplierDisplay').textContent = '1.00x';
+                        document.getElementById('multiplierDisplay').style.color = 'white';
+                        break;
+                    case 'mines':
+                        setupMinesGame();
+                        break;
+                }
             }
         }
         
         function resetGame() {
-            clearInterval(gameInterval);
-            gameStarted = false;
+            resetGameControls();
             currentGame = null;
-            currentBet = 0;
-            currentMultiplier = 1.0;
-            gameBetBtn.disabled = false;
-            gameCashoutBtn.style.display = 'none';
-            minesGameState = [];
-            selectedMinesCount = 0;
-            diamondsFound = 0;
-        }
-        
-        function resetGameControls() {
-            gameBetBtn.disabled = false;
-            gameCashoutBtn.style.display = 'none';
-            gameStarted = false;
         }
         
         function setBetAmount(amount) {
             gameBetAmount.value = amount;
-            playSound(clickSound);
         }
         
-        function toggleSound() {
-            config.soundEnabled = !config.soundEnabled;
-            soundToggle.innerHTML = config.soundEnabled ? 
-                '<i class="fas fa-volume-up"></i>' : 
-                '<i class="fas fa-volume-mute"></i>';
+        function updateUserData() {
+            localStorage.setItem('africlick_currentUser', JSON.stringify(currentUser));
             
-            // Provide feedback
-            if (config.soundEnabled) {
-                playSound(clickSound);
+            // Update in users array
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('africlick_users', JSON.stringify(users));
             }
-        }
-        
-        function playSound(sound) {
-            if (config.soundEnabled) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log("Audio play failed:", e));
-            }
-        }
-        
-        function showGameNotification(message, type) {
-            gameNotification.textContent = message;
-            gameNotification.className = `game-notification ${type}`;
-            gameNotification.style.display = 'block';
-            
-            // Animate notification
-            gsap.from(gameNotification, {
-                y: -50,
-                opacity: 0,
-                duration: 0.3
-            });
-            
-            setTimeout(() => {
-                gsap.to(gameNotification, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.3,
-                    onComplete: () => {
-                        gameNotification.style.display = 'none';
-                    }
-                });
-            }, 3000);
         }
         
         function renderHistory() {
+            if (!currentUser) return;
+            
             historyTable.innerHTML = '';
             
-            if (currentUser.history.length === 0) {
-                historyTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">Aucun historique pour le moment</td></tr>';
-                return;
-            }
-            
-            currentUser.history.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.date}</td>
-                    <td>${item.game || item.task || ''}</td>
-                    <td>${item.points > 0 ? '+' : ''}${item.points}</td>
-                    <td class="status-${item.status.toLowerCase().replace(' ', '-')}">${item.status}</td>
+            if (currentUser.history && currentUser.history.length > 0) {
+                currentUser.history.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${item.date}</td>
+                        <td>${item.game}</td>
+                        <td>${item.points > 0 ? '+' : ''}${item.points}</td>
+                        <td class="${item.status === 'Gagné' ? 'status-completed' : 'status-pending'}">${item.status}</td>
+                    `;
+                    
+                    historyTable.appendChild(row);
+                });
+            } else {
+                historyTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Aucun historique pour le moment</td>
+                    </tr>
                 `;
-                historyTable.appendChild(row);
-            });
+            }
         }
         
         function renderReferralsTable() {
+            if (!currentUser) return;
+            
             referralsTable.innerHTML = '';
             
             const userReferrals = referrals.filter(r => r.referrerId === currentUser.id);
             
-            if (userReferrals.length === 0) {
-                referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td></tr>';
-                return;
-            }
-            
-            userReferrals.forEach(ref => {
-                const referee = users.find(u => u.id === ref.refereeId);
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${ref.refereeUsername}</td>
-                    <td>${new Date(ref.date).toLocaleDateString()}</td>
-                    <td>${ref.bonusGiven ? 'Bonus attribué' : 'En attente de dépôt'}</td>
-                    <td>${ref.bonusGiven ? config.referralBonus : '0'}</td>
+            if (userReferrals.length > 0) {
+                userReferrals.forEach(ref => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${ref.refereeUsername}</td>
+                        <td>${new Date(ref.date).toLocaleDateString()}</td>
+                        <td>${ref.bonusGiven ? 'Bonus envoyé' : 'En attente de dépôt'}</td>
+                        <td>${ref.bonusGiven ? config.referralBonus : 0}</td>
+                    `;
+                    
+                    referralsTable.appendChild(row);
+                });
+            } else {
+                referralsTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Aucun filleul pour le moment</td>
+                    </tr>
                 `;
-                referralsTable.appendChild(row);
-            });
+            }
         }
         
         function toggleWheel() {
-            wheelContainer.style.display = wheelContainer.style.display === 'block' ? 'none' : 'block';
-            
             if (wheelContainer.style.display === 'block') {
-                initWheel();
+                wheelContainer.style.display = 'none';
+            } else {
+                wheelContainer.style.display = 'block';
+                createWheel();
             }
         }
         
-        function initWheel() {
+        function createWheel() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
-            wheel.style.transform = 'rotate(0deg)';
             
-            // Les gains sont multipliés par le multiplicateur de l'utilisateur
-            const basePrizes = [50, 20, 30, -10, 10, 25, 15, 100];
-            const prizes = basePrizes.map(p => Math.round(p * currentUser.wheelMultiplier));
-            const colors = ['#f1c40f', '#e67e22', '#e74c3c', '#9b59b6', '#3498db', '#2ecc71', '#1abc9c', '#95a5a6'];
+            const prizes = [50, 20, 30, -10, 10, 25, 15, 100];
+            const colors = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF', '#40C4FF', '#18FFFF'];
             
             const segmentAngle = 360 / prizes.length;
-            const radius = 150;
-            const center = radius;
             
             prizes.forEach((prize, index) => {
                 const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.transform = `rotate(${index * segmentAngle}deg)`;
+                segment.style.clipPath = 'polygon(0 0, 50% 0, 100% 100%, 0 50%)';
+                segment.style.backgroundColor = colors[index];
                 segment.style.position = 'absolute';
-                segment.style.width = '0';
-                segment.style.height = '0';
-                segment.style.borderStyle = 'solid';
-                segment.style.borderWidth = `${radius}px ${radius/6}px 0`;
-                segment.style.borderColor = `${colors[index]} transparent transparent`;
-                segment.style.transformOrigin = `${radius/6}px ${radius}px`;
-                segment.style.transform = `rotate(${segmentAngle * index}deg)`;
-                segment.style.left = `${center - radius/6}px`;
-                segment.style.top = '0';
+                segment.style.width = '100%';
+                segment.style.height = '100%';
+                segment.style.display = 'flex';
+                segment.style.alignItems = 'center';
+                segment.style.justifyContent = 'center';
                 
-                const prizeText = document.createElement('div');
+                const prizeText = document.createElement('span');
                 prizeText.textContent = prize > 0 ? `+${prize}` : prize;
+                prizeText.style.transform = `rotate(${segmentAngle / 2}deg)`;
                 prizeText.style.position = 'absolute';
-                prizeText.style.transform = `rotate(${segmentAngle * index + segmentAngle/2}deg)`;
-                prizeText.style.transformOrigin = '0 0';
-                prizeText.style.left = '40px';
-                prizeText.style.top = '-130px';
+                prizeText.style.left = '70%';
+                prizeText.style.top = '20%';
                 prizeText.style.color = 'white';
                 prizeText.style.fontWeight = 'bold';
-                prizeText.style.fontSize = '18px';
-                prizeText.style.width = '60px';
-                prizeText.style.textAlign = 'center';
+                prizeText.style.textShadow = '0 0 3px rgba(0,0,0,0.5)';
                 
                 segment.appendChild(prizeText);
                 wheel.appendChild(segment);
             });
         }
         
-        function checkWheelAttempts() {
-            if (!currentUser.lastWheelSpin) {
-                currentUser.wheelAttemptsLeft = config.wheelAttemptsPerDay;
-                updateUserData();
+        function spinWheel() {
+            if (!currentUser || currentUser.wheelAttemptsLeft <= 0) {
+                showNotification('Plus de tentatives disponibles aujourd\'hui', 'error');
                 return;
             }
+            
+            const wheel = document.getElementById('wheel');
+            const spinBtn = document.getElementById('spinWheelBtn');
+            
+            spinBtn.disabled = true;
+            
+            // Determine prize (with multiplier)
+            const basePrizes = [50, 20, 30, -10, 10, 25, 15, 100];
+            const prize = basePrizes[Math.floor(Math.random() * basePrizes.length)] * currentUser.wheelMultiplier;
+            const roundedPrize = Math.round(prize);
+            
+            // Calculate rotation (ensure it lands on the selected prize)
+            const segmentAngle = 360 / basePrizes.length;
+            const targetIndex = basePrizes.indexOf(basePrizes.find(p => p === basePrizes[Math.floor(Math.random() * basePrizes.length)]));
+            const targetRotation = 360 * 5 + (360 - (targetIndex * segmentAngle + segmentAngle / 2));
+            
+            // Animate wheel
+            gsap.to(wheel, {
+                rotation: targetRotation,
+                duration: 3,
+                ease: "back.out(1)",
+                onComplete: () => {
+                    // Update user attempts
+                    currentUser.wheelAttemptsLeft -= 1;
+                    currentUser.lastWheelSpin = new Date().toISOString();
+                    
+                    if (roundedPrize > 0) {
+                        // Add prize to user points
+                        currentUser.points += roundedPrize;
+                        showNotification(`Vous avez gagné ${roundedPrize} points!`, 'success');
+                        playSound(winSound);
+                        
+                        // Add confetti effect
+                        createConfetti();
+                    } else {
+                        showNotification(`Dommage! Vous avez perdu ${Math.abs(roundedPrize)} points.`, 'error');
+                        playSound(loseSound);
+                    }
+                    
+                    // Update UI
+                    updateUserData();
+                    pointsDisplay.textContent = currentUser.points;
+                    wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft;
+                    spinBtn.disabled = false;
+                    
+                    // Add to history
+                    const now = new Date();
+                    const wheelHistory = {
+                        date: now.toLocaleString(),
+                        game: 'Roue de la chance',
+                        points: roundedPrize,
+                        status: roundedPrize > 0 ? 'Gagné' : 'Perdu'
+                    };
+                    
+                    currentUser.history.unshift(wheelHistory);
+                    updateUserData();
+                    renderHistory();
+                }
+            });
+        }
+        
+        function checkWheelAttempts() {
+            if (!currentUser.lastWheelSpin) return;
             
             const lastSpinDate = new Date(currentUser.lastWheelSpin);
             const today = new Date();
             
+            // Reset attempts if it's a new day
             if (lastSpinDate.getDate() !== today.getDate() || 
                 lastSpinDate.getMonth() !== today.getMonth() || 
                 lastSpinDate.getFullYear() !== today.getFullYear()) {
                 currentUser.wheelAttemptsLeft = config.wheelAttemptsPerDay;
                 updateUserData();
+                wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft;
             }
-            
-            wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft;
-            spinWheelBtn.disabled = currentUser.wheelAttemptsLeft <= 0;
-        }
-        
-        function spinWheel() {
-            if (currentUser.wheelAttemptsLeft <= 0) {
-                showNotification('Vous avez déjà utilisé vos tentatives aujourd\'hui', 'warning');
-                return;
-            }
-            
-            const wheel = document.getElementById('wheel');
-            spinWheelBtn.disabled = true;
-            
-            // Animation de rotation
-            const spinDuration = 3000; // 3 secondes
-            const spins = 5; // Nombre de tours complets
-            const startTime = Date.now();
-            
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / spinDuration, 1);
-                const easeOut = 1 - Math.pow(1 - progress, 3); // Easing function
-                const rotation = 360 * spins * easeOut;
-                
-                wheel.style.transform = `rotate(${rotation}deg)`;
-                wheel.style.transition = 'transform 0.1s ease-out';
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    // Déterminer le prix gagné
-                    const basePrizes = [50, 20, 30, -10, 10, 25, 15, 100];
-                    const prizes = basePrizes.map(p => Math.round(p * currentUser.wheelMultiplier));
-                    const normalizedRotation = rotation % 360;
-                    const segmentAngle = 360 / prizes.length;
-                    const winningIndex = Math.floor(((360 - normalizedRotation) % 360) / segmentAngle);
-                    const prize = prizes[winningIndex];
-                    
-                    // Mettre à jour les tentatives
-                    currentUser.wheelAttemptsLeft -= 1;
-                    currentUser.lastWheelSpin = new Date().toISOString();
-                    
-                    // Appliquer le prix
-                    currentUser.points += prize;
-                    updateUserData();
-                    pointsDisplay.textContent = currentUser.points;
-                    
-                    // Ajouter à l'historique
-                    const now = new Date();
-                    const taskHistory = {
-                        date: now.toLocaleString(),
-                        task: "Roue de la chance",
-                        points: prize,
-                        status: prize > 0 ? 'Gagné' : 'Perdu'
-                    };
-                    
-                    currentUser.history.unshift(taskHistory);
-                    renderHistory();
-                    
-                    if (prize > 0) {
-                        showNotification(`Félicitations! Vous avez gagné ${prize} points!`, 'success');
-                        createConfetti();
-                    } else {
-                        showNotification(`Dommage! Vous avez perdu ${Math.abs(prize)} points.`, 'error');
-                    }
-                    
-                    // Mettre à jour l'affichage des tentatives
-                    wheelAttemptsDisplay.textContent = currentUser.wheelAttemptsLeft;
-                    spinWheelBtn.disabled = currentUser.wheelAttemptsLeft <= 0;
-                    
-                    // Sauvegarder les changements
-                    updateUserData();
-                }
-            }
-            
-            animate();
         }
         
         function openWithdrawModal() {
-            const minWithdraw = config.minWithdraw;
-            
-            if (currentUser.points < minWithdraw) {
-                showNotification(`Minimum de retrait: ${minWithdraw} points (${minWithdraw/config.pointsToMoneyRatio * 1000} FCFA)`, 'warning');
+            if (currentUser.points < config.minWithdraw) {
+                showNotification(`Vous avez besoin d'au moins ${config.minWithdraw} points pour effectuer un retrait`, 'error');
                 return;
             }
             
-            withdrawAmount.min = minWithdraw;
             withdrawAmount.max = currentUser.points;
-            withdrawAmount.value = minWithdraw;
             withdrawPhone.value = currentUser.phone;
-            
-            // Sélectionner la première méthode par défaut
-            methodBtns.forEach((btn, index) => {
-                if (btn.closest('#withdrawForm')) {
-                    if (index === 0) {
-                        btn.click();
-                    }
-                }
-            });
-            
             withdrawModal.style.display = 'flex';
         }
         
@@ -3570,22 +3927,14 @@
             referralModal.style.display = 'flex';
         }
         
-        function copyReferralCode() {
-            const code = userReferralCode.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                showNotification('Code de parrainage copié!', 'success');
-            }).catch(err => {
-                showNotification('Échec de la copie', 'error');
-            });
-        }
-        
         function handleDeposit(e) {
             e.preventDefault();
-            const amount = parseInt(depositAmount.value);
-            const method = depositMethod.value;
-            const phone = depositPhone.value;
             
-            if (amount < config.minDeposit) {
+            const amount = parseInt(depositAmount.value);
+            const phone = depositPhone.value;
+            const method = depositMethod.value;
+            
+            if (!amount || amount < config.minDeposit) {
                 showNotification(`Le montant minimum est de ${config.minDeposit} FCFA`, 'error');
                 return;
             }
@@ -3600,118 +3949,81 @@
                 return;
             }
             
-            // Simuler l'appel API à Moov ou Airtel
-            submitDeposit.disabled = true;
-            submitDeposit.innerHTML = '<div class="loading"></div> Envoi en cours...';
+            // Calculate points to add
+            const pointsToAdd = Math.floor(amount * config.pointsToMoneyRatio);
             
-            // Ceci est une simulation - en production, vous utiliseriez l'API Moov/Airtel
+            // Simulate API call
+            submitDeposit.disabled = true;
+            submitDeposit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
+            
             setTimeout(() => {
-                // Calculer les points à créditer (1000 FCFA = 10 points)
-                const pointsToAdd = Math.floor(amount * config.pointsToMoneyRatio);
+                // Update user points
+                currentUser.points += pointsToAdd;
+                currentUser.totalDeposited += amount;
                 
-                // Créer le dépôt
+                // Update wheel multiplier (1 + 0.5 per 5000 FCFA deposited)
+                currentUser.wheelMultiplier = 1 + (currentUser.totalDeposited / 5000) * 0.5;
+                
+                // Create deposit record
                 const deposit = {
                     id: Date.now(),
                     userId: currentUser.id,
                     amount,
-                    phone,
+                    phoneNumber: phone,
                     method,
-                    points: pointsToAdd,
+                    pointsCredited: pointsToAdd,
                     status: 'completed',
+                    transactionId: `DEP_${Date.now()}`,
                     date: new Date().toISOString()
                 };
                 
                 deposits.push(deposit);
                 localStorage.setItem('africlick_deposits', JSON.stringify(deposits));
                 
-                // Ajouter les points à l'utilisateur
-                currentUser.points += pointsToAdd;
-                currentUser.totalDeposited = (currentUser.totalDeposited || 0) + amount;
+                // Check for pending referrals
+                checkPendingReferrals();
                 
-                // Augmenter le multiplicateur de la roue en fonction des dépôts
-                // 5000 FCFA dépensés = multiplicateur x1.5, 10000 FCFA = x2, etc.
-                currentUser.wheelMultiplier = 1 + Math.floor(currentUser.totalDeposited / 5000) * 0.5;
+                // Update UI
+                updateUserData();
+                pointsDisplay.textContent = currentUser.points;
+                wheelMultiplierDisplay.textContent = currentUser.wheelMultiplier.toFixed(1);
                 
-                // Ajouter à l'historique
+                // Add to history
                 const now = new Date();
                 const depositHistory = {
                     date: now.toLocaleString(),
-                    task: `Dépôt ${method} (${phone})`,
+                    game: 'Dépôt',
                     points: pointsToAdd,
                     status: 'Complété'
                 };
                 
                 currentUser.history.unshift(depositHistory);
-                
-                // Vérifier les parrainages en attente
-                checkPendingReferrals();
-                
-                // Mettre à jour le stockage local
                 updateUserData();
-                
-                // Mettre à jour l'affichage
-                pointsDisplay.textContent = currentUser.points;
-                wheelMultiplierDisplay.textContent = currentUser.wheelMultiplier;
                 renderHistory();
                 
-                // Fermer la modal
+                // Close modal and reset form
                 depositModal.style.display = 'none';
+                depositForm.reset();
                 submitDeposit.disabled = false;
                 submitDeposit.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer la demande';
                 
+                // Show success message
                 showNotification(`Dépôt de ${amount} FCFA réussi! ${pointsToAdd} points ajoutés.`, 'success');
+                playSound(coinSound);
+                
+                // Create coin animation
                 createCoinAnimation(pointsToAdd);
-            }, 2000);
-        }
-        
-        function checkPendingReferrals() {
-            const pendingReferrals = referrals.filter(
-                r => r.refereeId === currentUser.id && !r.bonusGiven
-            );
-            
-            pendingReferrals.forEach(ref => {
-                const referrer = users.find(u => u.id === ref.referrerId);
-                if (referrer) {
-                    // Donner le bonus au parrain
-                    referrer.points += config.referralBonus;
-                    
-                    // Ajouter à l'historique du parrain
-                    const now = new Date();
-                    const referralHistory = {
-                        date: now.toLocaleString(),
-                        task: `Bonus parrainage (${currentUser.username})`,
-                        points: config.referralBonus,
-                        status: 'Gagné'
-                    };
-                    
-                    referrer.history.unshift(referralHistory);
-                    
-                    // Marquer le parrainage comme complété
-                    ref.bonusGiven = true;
-                    
-                    // Mettre à jour l'utilisateur parrain
-                    const userIndex = users.findIndex(u => u.id === referrer.id);
-                    if (userIndex !== -1) {
-                        users[userIndex] = referrer;
-                    }
-                    
-                    showNotification(`Bonus de parrainage attribué à ${referrer.username}!`, 'info');
-                }
-            });
-            
-            if (pendingReferrals.length > 0) {
-                localStorage.setItem('africlick_users', JSON.stringify(users));
-                localStorage.setItem('africlick_referrals', JSON.stringify(referrals));
-            }
+            }, 1500);
         }
         
         function handleWithdraw(e) {
             e.preventDefault();
-            const amount = parseInt(withdrawAmount.value);
-            const method = withdrawMethod.value;
-            const phone = withdrawPhone.value;
             
-            if (amount < config.minWithdraw) {
+            const amount = parseInt(withdrawAmount.value);
+            const phone = withdrawPhone.value;
+            const method = withdrawMethod.value;
+            
+            if (!amount || amount < config.minWithdraw) {
                 showNotification(`Le montant minimum est de ${config.minWithdraw} points`, 'error');
                 return;
             }
@@ -3731,94 +4043,129 @@
                 return;
             }
             
-            // Simuler l'appel API à Moov ou Airtel
+            // Simulate API call
             submitWithdraw.disabled = true;
-            submitWithdraw.innerHTML = '<div class="loading"></div> Envoi en cours...';
+            submitWithdraw.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
             
-            // Ceci est une simulation - en production, vous utiliseriez l'API Moov/Airtel
             setTimeout(() => {
-                const moneyAmount = (amount / config.pointsToMoneyRatio) * 1000; // Convertir en FCFA
+                // Deduct points
+                currentUser.points -= amount;
                 
-                // Créer la demande de retrait
+                // Create withdrawal record
                 const withdrawal = {
                     id: Date.now(),
                     userId: currentUser.id,
                     amount,
-                    phone,
+                    phoneNumber: phone,
                     method,
                     status: 'pending',
+                    transactionId: `WTH_${Date.now()}`,
                     date: new Date().toISOString()
                 };
                 
                 withdrawals.push(withdrawal);
                 localStorage.setItem('africlick_withdrawals', JSON.stringify(withdrawals));
                 
-                // Déduire les points
-                currentUser.points -= amount;
+                // Update UI
+                updateUserData();
+                pointsDisplay.textContent = currentUser.points;
                 
-                // Ajouter à l'historique
+                // Add to history
                 const now = new Date();
-                const withdrawHistory = {
+                const withdrawalHistory = {
                     date: now.toLocaleString(),
-                    task: `Retrait ${method} (${phone})`,
+                    game: 'Retrait',
                     points: -amount,
-                    status: 'En traitement'
+                    status: 'En attente'
                 };
                 
-                currentUser.history.unshift(withdrawHistory);
-                
-                // Mettre à jour le stockage local
+                currentUser.history.unshift(withdrawalHistory);
                 updateUserData();
-                
-                // Mettre à jour l'affichage
-                pointsDisplay.textContent = currentUser.points;
                 renderHistory();
                 
-                // Fermer la modal
+                // Close modal and reset form
                 withdrawModal.style.display = 'none';
+                withdrawForm.reset();
                 submitWithdraw.disabled = false;
                 submitWithdraw.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer la demande';
                 
-                showNotification(`Demande de retrait de ${moneyAmount} FCFA envoyée. Traitement sous 24h.`, 'success');
-            }, 2000);
+                // Show success message
+                showNotification(`Demande de retrait de ${amount} points enregistrée. Traitement sous 24h.`, 'success');
+            }, 1500);
         }
         
-        function switchTab(tabId) {
-            // Désactiver tous les onglets
+        function checkPendingReferrals() {
+            if (!currentUser) return;
+            
+            const userReferrals = referrals.filter(r => r.refereeId === currentUser.id && !r.bonusGiven);
+            
+            if (userReferrals.length > 0) {
+                userReferrals.forEach(ref => {
+                    // Find referrer
+                    const referrer = users.find(u => u.id === ref.referrerId);
+                    if (referrer) {
+                        // Add bonus to referrer
+                        referrer.points += config.referralBonus;
+                        
+                        // Mark referral as completed
+                        ref.bonusGiven = true;
+                        
+                        // Update in users array
+                        const referrerIndex = users.findIndex(u => u.id === referrer.id);
+                        if (referrerIndex !== -1) {
+                            users[referrerIndex] = referrer;
+                            localStorage.setItem('africlick_users', JSON.stringify(users));
+                        }
+                        
+                        // Update referrals array
+                        const referralIndex = referrals.findIndex(r => r.id === ref.id);
+                        if (referralIndex !== -1) {
+                            referrals[referralIndex] = ref;
+                            localStorage.setItem('africlick_referrals', JSON.stringify(referrals));
+                        }
+                        
+                        // Show notification to referrer if they're the current user
+                        if (referrer.id === currentUser.id) {
+                            showNotification(`Bonus de parrainage: +${config.referralBonus} points pour ${ref.refereeUsername}`, 'success');
+                        }
+                    }
+                });
+                
+                // Update referrals table if open
+                if (referralModal.style.display === 'flex') {
+                    renderReferralsTable();
+                }
+            }
+        }
+        
+        function copyReferralCode() {
+            if (!currentUser.referralCode) return;
+            
+            navigator.clipboard.writeText(currentUser.referralCode)
+                .then(() => {
+                    showNotification('Code de parrainage copié!', 'success');
+                })
+                .catch(err => {
+                    showNotification('Échec de la copie du code', 'error');
+                });
+        }
+        
+        function switchTab(tabName) {
             tabs.forEach(tab => tab.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
             
-            // Activer l'onglet sélectionné
-            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-            document.getElementById(`${tabId}Tab`).classList.add('active');
-        }
-        
-        function updateUserData() {
-            // Mettre à jour l'utilisateur dans le tableau des utilisateurs
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            if (userIndex !== -1) {
-                users[userIndex] = currentUser;
-                localStorage.setItem('africlick_users', JSON.stringify(users));
-                localStorage.setItem('africlick_currentUser', JSON.stringify(currentUser));
-            }
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}Tab`).classList.add('active');
         }
         
         function showNotification(message, type = 'success') {
-            notification.className = 'notification';
-            notification.classList.add(type);
+            notification.className = `notification ${type}`;
             notificationText.textContent = message;
             
-            // Changer l'icône selon le type
             const icon = notification.querySelector('i');
-            if (type === 'error') {
-                icon.className = 'fas fa-exclamation-circle';
-            } else if (type === 'warning') {
-                icon.className = 'fas fa-exclamation-triangle';
-            } else if (type === 'info') {
-                icon.className = 'fas fa-info-circle';
-            } else {
-                icon.className = 'fas fa-check-circle';
-            }
+            icon.className = type === 'error' ? 'fas fa-exclamation-circle' : 
+                            type === 'warning' ? 'fas fa-exclamation-triangle' : 
+                            type === 'info' ? 'fas fa-info-circle' : 'fas fa-check-circle';
             
             notification.classList.add('show');
             
@@ -3827,13 +4174,46 @@
             }, 3000);
         }
         
+        function showGameNotification(message, type = 'success') {
+            gameNotification.textContent = message;
+            gameNotification.className = `game-notification ${type}`;
+            gameNotification.style.display = 'block';
+            
+            setTimeout(() => {
+                gameNotification.style.display = 'none';
+            }, 3000);
+        }
+        
+        function playSound(sound) {
+            if (!config.soundEnabled) return;
+            
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log('Audio play failed:', e));
+        }
+        
+        function toggleSound() {
+            config.soundEnabled = !config.soundEnabled;
+            
+            if (config.soundEnabled) {
+                soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                showNotification('Son activé', 'success');
+            } else {
+                soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                showNotification('Son désactivé', 'info');
+            }
+        }
+        
         function createConfetti() {
+            if (!config.soundEnabled) return;
+            
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                
                 document.body.appendChild(confetti);
                 
                 setTimeout(() => {
@@ -3846,8 +4226,12 @@
             const coin = document.createElement('div');
             coin.className = 'coin-animation';
             coin.textContent = `+${amount}`;
-            coin.style.left = `${Math.random() * 100}vw`;
-            coin.style.animationDuration = `${Math.random() * 0.5 + 0.5}s`;
+            
+            // Position at the deposit button
+            const depositBtnRect = depositBtn.getBoundingClientRect();
+            coin.style.left = `${depositBtnRect.left + depositBtnRect.width/2 - 15}px`;
+            coin.style.top = `${depositBtnRect.top}px`;
+            
             document.body.appendChild(coin);
             
             setTimeout(() => {
